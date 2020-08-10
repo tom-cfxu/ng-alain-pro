@@ -1,0 +1,102 @@
+<nz-skeleton [nzLoading]="loading">
+  <sv-container col="2" [title]="'基本信息'">
+    <sv label="状态">{{ i.status_str }}</sv>
+    <sv label="收货人姓名">{{ i.buyer_nick }}</sv>
+    <sv label="收货人电话">{{ i.buyer_tel }}</sv>
+    <sv label="收货人地址" col="1">{{ i.buyer_adr }}</sv>
+    <sv label="支付" col="1">{{ i.pay_id }}</sv>
+    <sv label="物流" col="1" *ngIf="i.logistics_name">{{ i.logistics_name }} {{ i.logistics_no }}</sv>
+    <sv label="下单时间">{{ i.created | _date }}</sv>
+    <sv label="支付时间" *ngIf="i.pay_time">{{ i.pay_time | _date }}</sv>
+    <sv label="发货时间" *ngIf="i.consign_time">{{ i.consign_time | _date }}</sv>
+    <sv label="完成时间" *ngIf="i.end_time">{{ i.end_time | _date }}</sv>
+    <sv label="买家备注" *ngIf="i.buyer_message" col="1">{{ i.buyer_message }}</sv>
+    <sv label="商家备注" *ngIf="i.memo" col="1">{{ i.memo }}</sv>
+  </sv-container>
+  <nz-table
+    [nzData]="i.wares"
+    [nzShowPagination]="false"
+    [nzFooter]="footer"
+    nzSize="small"
+    class="d-block pt-sm pb-md"
+  >
+    <thead>
+      <tr>
+        <th>SKU编号</th>
+        <th>外部编号</th>
+        <th>商品名称</th>
+        <th>商品价格</th>
+        <th>优惠金额</th>
+        <th>商品数量</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let g of i.wares">
+        <td>{{ g.sku_id }}</td>
+        <td>{{ g.outer_id }}</td>
+        <td>{{ g.title }}</td>
+        <td>{{ g.price | _currency }}</td>
+        <td>{{ g.discount_fee | _currency }}</td>
+        <td>{{ g.num }}</td>
+      </tr>
+    </tbody>
+    <ng-template #footer>
+      <div class="text-right">
+        <p>
+          商品总金额：{{ i.price | _currency }} - 优惠：{{ i.discount_fee | _currency }} - 返现：{{
+            i.cashback | _currency
+          }}
+          - 优惠券：{{ i.coupon_fee | _currency }} + 税费：{{ i.tax_fee | _currency }} + 运费：{{
+            i.post_fee | _currency
+          }}
+        </p>
+        订单支付金额：
+        <strong class="text-error">{{ i.payment | _currency }}</strong>
+      </div>
+    </ng-template>
+  </nz-table>
+</nz-skeleton>
+<div class="drawer-footer" *ngIf="i.status !== 'CANCELED'">
+  <button nz-button (click)="close()">关闭</button>
+  <ng-container *ngIf="i.status === 'WAIT_BUYER_PAY'">
+    <button
+      nz-popconfirm
+      nzPopconfirmTitle="确定吗？"
+      (nzOnConfirm)="status('WAIT_SELLER_STOCK_OUT')"
+      nz-button
+      nzType="danger"
+    >
+      取消订单
+    </button>
+    <button
+      nz-popconfirm
+      nzPopconfirmTitle="确定吗？"
+      (nzOnConfirm)="status('WAIT_SELLER_STOCK_OUT')"
+      nz-button
+      nzType="danger"
+      class="pl-sm"
+    >
+      设置为已支付
+    </button>
+  </ng-container>
+  <button
+    nz-popconfirm
+    *ngIf="i.status === 'WAIT_SELLER_STOCK_OUT'"
+    nzPopconfirmTitle="确定吗？"
+    (nzOnConfirm)="status('WAIT_GOODS_RECEIVE_CONFIRM')"
+    nz-button
+    nzType="danger"
+  >
+    设置为已出库
+  </button>
+  <button
+    nz-popconfirm
+    *ngIf="i.status === 'WAIT_GOODS_RECEIVE_CONFIRM'"
+    nzPopconfirmTitle="确定吗？"
+    (nzOnConfirm)="status('FINISHED')"
+    nz-button
+    nzType="danger"
+  >
+    设置为已收货
+  </button>
+</div>

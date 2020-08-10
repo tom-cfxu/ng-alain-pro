@@ -1,0 +1,17 @@
+<page-header-wrapper>
+  <nz-card>
+    <div class="d-flex justify-content-between align-items-center mb-md">
+      <button (click)="create()" nz-button nzType="primary">
+        <i nz-icon nzType="plus"></i>
+        新建
+      </button>
+      <nz-input-group [nzSuffix]="suffixIconSearch" class="max-width-sm">
+        <input type="text" [(ngModel)]="params.q" delay (delayChange)="st.reload()" nz-input placeholder="title..." />
+      </nz-input-group>
+      <ng-template #suffixIconSearch>
+        <i nz-icon nzType="search"></i>
+      </ng-template>
+    </div>
+    <st #st [data]="url" [columns]="columns" [req]="{ params: params }"></st>
+  </nz-card>
+</page-header-wrapper>

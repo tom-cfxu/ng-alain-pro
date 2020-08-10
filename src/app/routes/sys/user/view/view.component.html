@@ -1,0 +1,50 @@
+<page-grid title="查看 {{ id }} 用户" [loading]="!i">
+  <ng-container *ngIf="i">
+    <div class="d-flex align-items-center py-md mb-md">
+      <img class="d-block rounded-circle" src="/assets/tmp/img/avatar.jpg" style="width: 100px;" />
+      <div class="flex-1 ml-lg">
+        <h4 class="text-lg font-weight-bold mb0">
+          {{ i.name }}<span class="text-grey font-weight-normal pl-sm">{{ i.email }}</span>
+        </h4>
+        <div class="text-muted mb-sm">ID: {{ i.id }}</div>
+        <button routerLink="/sys/user/edit/{{ i.id }}" nz-button nzType="primary" nzSize="small">Edit</button>
+        <button nz-button nzSize="small">Profile</button>
+        <button nz-button nzSize="small"><i nz-icon nzType="user"></i></button>
+      </div>
+    </div>
+    <nz-card class="ant-card__body-nopadding">
+      <sv-container col="1" labelWidth="150" class="p-lg">
+        <sv label="Registered">{{ i.created | _date }}</sv>
+        <sv label="Verified"
+          ><span [innerHTML]="i.verified | yn" class="pr-sm"></span>{{ i.verified ? 'Yes' : 'No' }}</sv
+        >
+        <sv label="Role">{{ i.role.text }}</sv>
+        <sv label="Status">
+          <nz-tag [nzColor]="i.status_obj.color">{{ i.status_obj.text }}</nz-tag>
+        </sv>
+      </sv-container>
+      <st [data]="permissions" [columns]="permissionColumns" [page]="{ show: false }"></st>
+    </nz-card>
+    <nz-card class="ant-card__body-nopadding">
+      <sv-container col="1" class="p-lg">
+        <sv label="User Name">{{ i.userName }}</sv>
+        <sv label="Name">{{ i.name }}</sv>
+        <sv label="E-mail">{{ i.email }}</sv>
+        <sv label="Company">Company Ltd.</sv>
+        <sv-title>Social links</sv-title>
+        <sv label="知乎">https://www.zhihu.com/people/cipchk</sv>
+        <sv label="GitHub">https://github.com/cipchk</sv>
+        <sv label="Twitter">https://twitter.com/cipchk</sv>
+        <sv-title>Personal info</sv-title>
+        <sv label="Birthday">{{ '1991-6-5' | _date }}</sv>
+        <sv label="Country">China</sv>
+        <sv label="Languages">Chinese</sv>
+        <sv-title>Contacts</sv-title>
+        <sv label="Phone">你猜</sv>
+        <sv-title>Interests</sv-title>
+        <sv label="Favorite music">你猜</sv>
+        <sv label="Favorite movies">你猜</sv>
+      </sv-container>
+    </nz-card>
+  </ng-container>
+</page-grid>

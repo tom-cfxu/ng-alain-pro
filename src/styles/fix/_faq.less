@@ -1,0 +1,30 @@
+.faq-v1 {
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    &-icon {
+      font-size: 24px;
+    }
+    &-title {
+      margin-bottom: 0;
+      font-weight: normal;
+      font-size: 14px;
+    }
+    &-remark {
+      margin-bottom: 0;
+      color: @grey-6;
+    }
+    &-hover {
+      background-color: rgba(0, 0, 0, 0.02);
+      cursor: pointer;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+        .faq__item-icon,
+        .faq__item-title {
+          color: @primary-color;
+        }
+      }
+    }
+  }
+}

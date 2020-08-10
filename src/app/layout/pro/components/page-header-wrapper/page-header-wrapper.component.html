@@ -1,0 +1,13 @@
+<nz-spin [nzSpinning]="loading">
+  <ng-template [ngTemplateOutlet]="top"></ng-template>
+  <page-header [wide]="pro.isFixed" [fixed]="false" [title]="title" [home]="home" [homeLink]="homeLink"
+    [homeI18n]="homeI18n" [autoBreadcrumb]="autoBreadcrumb" [autoTitle]="autoTitle" [syncTitle]="syncTitle"
+    [action]="action" [breadcrumb]="breadcrumb" [logo]="logo" [content]="content" [extra]="extra" [tab]="tab">
+    <ng-template [ngTemplateOutlet]="phContent"></ng-template>
+  </page-header>
+  <div class="alain-pro__page-header-content">
+    <page-grid [noSpacing]="noSpacing" [style]="style">
+      <ng-content></ng-content>
+    </page-grid>
+  </div>
+</nz-spin>

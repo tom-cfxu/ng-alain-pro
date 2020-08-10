@@ -1,0 +1,114 @@
+<page-grid [loading]="!list" noSpacing>
+  <div *ngIf="list" class="message__container">
+    <email-sidebox [(visible)]="menuVisible" (changed)="changeType($event)"></email-sidebox>
+    <div class="d-flex flex-column width-100">
+      <div class="flex-grow-0">
+        <h3 class="h3 d-flex align-items-center font-weight-bold px-lg pt-lg pb-md">
+          <a (click)="menuVisible = true" class="hidden-pc">
+            <i nz-icon nzType="ellipsis" class="rotate-90 text-grey-dark mr-md"></i>
+          </a>
+          <div class="flex-1"><i nz-icon nzType="inbox" class="pr-sm"></i>Inbox</div>
+          <input
+            type="text"
+            [(ngModel)]="s.q"
+            delay
+            (delayChange)="load()"
+            nz-input
+            nzSize="small"
+            placeholder="search..."
+            style="width: 100px"
+          />
+        </h3>
+        <div class="message__tools">
+          <div class="message__tools-choose">
+            <label
+              nz-checkbox
+              [ngModel]="isChoosed"
+              (ngModelChange)="chooseAll($event)"
+              [nzIndeterminate]="isChoosed && !chooseFull"
+              name="isChooseAll"
+              class="btn-flat my-sm"
+            ></label>
+            <i nz-dropdown [nzDropdownMenu]="messageMenu" nz-icon nzType="down" class="pl-sm"></i>
+            <nz-dropdown-menu #messageMenu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item (click)="choose('all')">All</li>
+                <li nz-menu-item (click)="choose('none')">None</li>
+                <li nz-menu-item (click)="choose('read')">Read</li>
+                <li nz-menu-item (click)="choose('unread')">UnRead</li>
+                <li nz-menu-item (click)="choose('starred')">Starred</li>
+                <li nz-menu-item (click)="choose('unstarred')">Unstarred</li>
+              </ul>
+            </nz-dropdown-menu>
+            <button nz-tooltip="Refresh" nz-button nzSize="small" class="btn-flat m-sm">
+              <i nz-icon nzType="reload"></i>
+            </button>
+            <button nz-tooltip="Mark as unread" nz-button [disabled]="!isChoosed" nzSize="small" class="btn-flat m-sm">
+              <i nz-icon nzType="folder"></i>
+            </button>
+            <button
+              nz-tooltip="Mark as important"
+              nz-button
+              [disabled]="!isChoosed"
+              nzSize="small"
+              class="btn-flat m-sm"
+            >
+              <i nz-icon nzType="exclamation-circle" nzTheme="fill"></i>
+            </button>
+            <button nz-tooltip="Move to spam" nz-button [disabled]="!isChoosed" nzSize="small" class="btn-flat m-sm">
+              <i nz-icon nzType="folder"></i>
+            </button>
+            <button nz-tooltip="Move to trash" nz-button [disabled]="!isChoosed" nzSize="small" class="btn-flat m-sm">
+              <i nz-icon nzType="delete"></i>
+            </button>
+          </div>
+          <div class="text-grey mr-md" style="margin-left: auto !important;">1-{{ s.pi * s.ps }} of {{ total }}</div>
+          <div class="d-flex flex-wrap">
+            <button nz-button nzSize="small" class="btn-flat m-sm">
+              <i nz-icon nzType="left"></i>
+            </button>
+            <button nz-button nzSize="small" class="btn-flat m-sm">
+              <i nz-icon nzType="right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="flex-grow-1">
+        <div class="message__content">
+          <div
+            *ngFor="let i of list; let idx = index"
+            class="message__item"
+            [ngClass]="{ 'message__item-unread': !i.read }"
+          >
+            <label
+              nz-checkbox
+              [(ngModel)]="i.selected"
+              (ngModelChange)="choose(i)"
+              name="selected.{{ idx }}"
+              class="mr-md"
+            ></label>
+            <i
+              (click)="i.star = !i.star"
+              nz-icon
+              nzType="star"
+              [nzTheme]="i.star ? 'fill' : 'outline'"
+              class="mr-md point"
+              [ngClass]="{ 'text-warning': i.star }"
+            ></i>
+            <div class="message__item-from text-truncate">
+              <nz-badge *ngIf="!i.read" nzStatus="processing"></nz-badge>
+              {{ i.from_name }}
+            </div>
+            <a routerLink="/other/email/{{ i.id }}" class="message__item-subject py-sm">
+              {{ i.subject }}
+            </a>
+            <span class="message__item-date">{{ i.time }}</span>
+          </div>
+          <div *ngIf="total > list.length" class="mt-md text-center">
+            <button (click)="load('next')" nz-button [nzLoading]="http.loading">Load more...</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</page-grid>

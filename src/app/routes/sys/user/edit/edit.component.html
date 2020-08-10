@@ -1,0 +1,128 @@
+<page-grid title="编辑 {{ id }} 用户" [loading]="!i">
+  <form *ngIf="i != null" nz-form #f="ngForm" (ngSubmit)="save()">
+    <nz-tabset [nzType]="'card'" class="edit-card">
+      <nz-tab nzTitle="Account">
+        <div class="d-flex align-items-center p-lg border-bottom-1">
+          <img src="/assets/tmp/img/avatar.jpg" style="width: 64px;" class="pr-lg" />
+          <nz-upload nzAction="/user/avatar" [nzShowUploadList]="false">
+            <button type="button" nz-button nzType="primary" nzSize="small">Change</button>
+          </nz-upload>
+          <button type="button" nz-button nzSize="small" class="ml-sm">Reset</button>
+        </div>
+        <div se-container="1" class="p-lg border-bottom-1">
+          <se label="Username" required error="Required">
+            <input nz-input [(ngModel)]="i.userName" name="i.userName" required />
+          </se>
+          <se label="Name" required error="Required">
+            <input nz-input [(ngModel)]="i.name" name="i.name" required />
+          </se>
+          <se label="E-mail" required error="Required">
+            <input nz-input [(ngModel)]="i.email" name="i.email" required />
+          </se>
+          <se label="Company">
+            <input nz-input [(ngModel)]="i.company" name="i.company" />
+          </se>
+        </div>
+        <div se-container="1" class="p-lg border-bottom-1">
+          <se label="Role" required error="Required" *ngIf="roles">
+            <nz-tree-select [nzNodes]="roles" nzShowSearch [(ngModel)]="i.role.id" name="role"> </nz-tree-select>
+          </se>
+          <se label="Extra permission" *ngIf="pers">
+            <nz-tree-select [nzNodes]="pers" nzShowSearch nzMultiple [(ngModel)]="i.permission" name="pers">
+            </nz-tree-select>
+          </se>
+          <se label="Status" required error="Required">
+            <nz-select [(ngModel)]="i.status" name="status">
+              <nz-option nzLabel="Active" nzValue="active"></nz-option>
+              <nz-option nzLabel="Banned" nzValue="banned"></nz-option>
+              <nz-option nzLabel="Deleted" nzValue="deleted"></nz-option>
+            </nz-select>
+          </se>
+          <se label="">
+            <label nz-checkbox [(ngModel)]="i.verified" name="verified">Verified</label>
+          </se>
+        </div>
+        <nz-table [nzData]="permissions" [nzShowPagination]="false">
+          <thead>
+            <tr>
+              <th>Module</th>
+              <th>Read</th>
+              <th>Write</th>
+              <th>Create</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of permissions; let idx = index">
+              <td>{{ p.name }}</td>
+              <td><label nz-checkbox [(ngModel)]="p.read" name="p{{ idx }}.read"></label></td>
+              <td><label nz-checkbox [(ngModel)]="p.write" name="p{{ idx }}.write"></label></td>
+              <td><label nz-checkbox [(ngModel)]="p.create" name="p{{ idx }}.create"></label></td>
+              <td><label nz-checkbox [(ngModel)]="p.delete" name="p{{ idx }}.delete"></label></td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </nz-tab>
+      <nz-tab nzTitle="Information">
+        <div se-container="1" class="p-lg border-bottom-1">
+          <se-title>Social links</se-title>
+          <se label="知乎">
+            <input nz-input [(ngModel)]="i.zhihu" name="i.zhihu" />
+          </se>
+          <se label="GitHub">
+            <input nz-input [(ngModel)]="i.github" name="i.github" />
+          </se>
+          <se label="Twitter">
+            <input nz-input [(ngModel)]="i.twitter" name="i.twitter" />
+          </se>
+          <se-title>Personal info</se-title>
+          <se label="Birthday">
+            <nz-date-picker [(ngModel)]="i.birthday" name="birthday"></nz-date-picker>
+          </se>
+          <se label="Country">
+            <nz-select [(ngModel)]="i.country" name="country">
+              <nz-option nzLabel="China" nzValue="China"></nz-option>
+              <nz-option nzLabel="USA" nzValue="USA"></nz-option>
+            </nz-select>
+          </se>
+          <se label="Languages">
+            <nz-select [nzMaxMultipleCount]="3" nzMode="multiple" [(ngModel)]="i.languages" name="languages">
+              <nz-option nzLabel="Chinaese" nzValue="Chinaese"></nz-option>
+              <nz-option nzLabel="English" nzValue="English"></nz-option>
+            </nz-select>
+          </se>
+          <se-title>Contacts</se-title>
+          <se label="Phone">
+            <input nz-input [(ngModel)]="i.phone" name="i.phone" />
+          </se>
+          <se label="Website">
+            <input nz-input [(ngModel)]="i.website" name="i.website" />
+          </se>
+          <se-title>Interests</se-title>
+          <se label="Favorite music">
+            <nz-select nzMode="tags" nzPlaceHolder="+ Tag" [(ngModel)]="i.music" name="i.music">
+              <nz-option nzLabel="爱拼才会赢" nzValue="爱拼才会赢"></nz-option>
+              <nz-option nzLabel="Girls Like You" nzValue="Girls Like You"></nz-option>
+              <nz-option nzLabel="ZEZE" nzValue="ZEZE"></nz-option>
+              <nz-option nzLabel="Lucid Dreams" nzValue="Lucid Dreams"></nz-option>
+            </nz-select>
+          </se>
+          <se label="Favorite movies">
+            <nz-select nzMode="tags" nzPlaceHolder="+ Tag" [(ngModel)]="i.movies" name="i.movies">
+              <nz-option nzLabel="The Shawshank Redemption" nzValue="The Shawshank Redemption"></nz-option>
+              <nz-option nzLabel="The Godfather" nzValue="The Godfather"></nz-option>
+              <nz-option nzLabel="The Godfather: Part II" nzValue="The Godfather: Part II"></nz-option>
+              <nz-option nzLabel="The Dark Knight" nzValue="The Dark Knight"></nz-option>
+              <nz-option nzLabel="12 Angry Men" nzValue="12 Angry Men"></nz-option>
+              <nz-option nzLabel="Schindler's List" nzValue="Schindler's List"></nz-option>
+            </nz-select>
+          </se>
+        </div>
+      </nz-tab>
+    </nz-tabset>
+    <footer-toolbar>
+      <button type="submit" nz-button nzType="primary" [disabled]="f.invalid">Save changes</button>
+      <button type="button" nz-button (click)="cancel()">Cancel</button>
+    </footer-toolbar>
+  </form>
+</page-grid>

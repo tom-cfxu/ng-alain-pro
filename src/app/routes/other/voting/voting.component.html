@@ -1,0 +1,36 @@
+<page-header-wrapper [loading]="loading">
+  <ng-container *ngIf="list">
+    <div *ngIf="total === 0" class="no-data">No Data</div>
+    <div *ngFor="let i of list" class="d-flex align-items-center bg-white rounded-sm p-lg mb-md">
+      <div class="d-flex flex-column justify-content-center align-items-center" style="min-width: 50px;">
+        <i nz-icon nzType="up" class="point text-hover" (click)="voting(i, 'up')"></i>
+        <span class="py-xs text-xl font-weight-bold">{{
+          i.voting > 1000 ? (i.voting / 1000).toFixed(1) + 'K' : i.voting
+        }}</span>
+        <i nz-icon nzType="down" class="point text-hover" (click)="voting(i, 'down')"></i>
+      </div>
+      <div class="ml-md">
+        <a class="text-md">{{ i.title }}</a>
+        <div class="py-sm">{{ i.content }}</div>
+        <div class="text-xs">
+          <a class="text-grey text-hover">
+            <i nz-icon nzType="message" class="mr-xs"></i>
+            {{ i.likes }}
+          </a>
+          <span class="text-grey ml-lg">
+            <i nz-icon nzType="clock-circle" class="mr-xs"></i>
+            0.3h
+          </span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="total > s.ps" class="text-right">
+      <nz-pagination
+        [nzPageIndex]="s.pi"
+        [nzPageSize]="s.ps"
+        [nzTotal]="total"
+        (nzPageIndexChange)="load($event)"
+      ></nz-pagination>
+    </div>
+  </ng-container>
+</page-header-wrapper>

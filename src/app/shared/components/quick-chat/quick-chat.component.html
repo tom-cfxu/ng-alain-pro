@@ -1,0 +1,47 @@
+<div class="quick-chat__bar">
+  <strong class="quick-chat__bar--title" (click)="toggleCollapsed()">
+    <div [ngClass]="{ 'quick-chat__bar--title-has-message': collapsed && hasMessage }">
+      {{ !collapsed && inited ? 'Connecting...' : 'Ng Alain Pro' }}
+    </div>
+  </strong>
+  <i nz-dropdown [nzDropdownMenu]="quickMenu" nz-icon nzType="ellipsis" class="quick-chat__bar--menu rotate-90"></i>
+  <nz-dropdown-menu #quickMenu="nzDropdownMenu">
+    <ul nz-menu nzSelectable>
+      <li nz-menu-item>Add</li>
+      <li nz-menu-item>Edit</li>
+      <li nz-menu-item>Remove</li>
+    </ul>
+  </nz-dropdown-menu>
+  <i nz-icon nzType="close" class="quick-chat__bar--close" (click)="close()"></i>
+</div>
+<div class="quick-chat__body" [ngClass]="{ 'quick-chat__collapsed': collapsed }">
+  <div class="quick-chat__content">
+    <div class="chat__scroll-container chat__message-container" scrollbar #messageScrollbar="scrollbarComp">
+      <div *ngFor="let m of messages" class="chat__message chat__message-{{ m.dir }}">
+        <ng-container [ngSwitch]="m.type">
+          <div *ngSwitchCase="'only-text'" class="chat__message-text" [innerHTML]="m.msg"></div>
+          <ng-container *ngSwitchDefault>
+            <div class="chat__message-avatar" *ngIf="m.dir === 'left'">
+              <img class="chat__user-avatar" src="{{ m.mp }}" />
+            </div>
+            <div class="chat__message-msg">
+              <strong class="chat__message-msg--name" *ngIf="m.name">{{ m.name }}</strong>
+              <div class="chat__message-msg--text" *ngIf="m.type === 'text'" [innerHTML]="m.msg"></div>
+              <div class="chat__message-msg--image" *ngIf="m.type === 'image'">
+                <img height="40" src="{{ m.msg }}" />
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <div class="quick-chat__reply">
+    <textarea
+      class="quick-chat__reply--ipt scrollbar"
+      [(ngModel)]="text"
+      (keydown.enter)="enterSend($event)"
+      placeholder="Type your message..."
+    ></textarea>
+  </div>
+</div>

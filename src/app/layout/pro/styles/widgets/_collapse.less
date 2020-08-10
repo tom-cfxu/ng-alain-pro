@@ -1,0 +1,13 @@
+.brand {
+  // 将 `nz-ollapse` 的 arrow 图标转化为右边
+  &-collapse-arrow-reverse {
+    .@{ant-prefix}-collapse > .@{ant-prefix}-collapse-item > .@{ant-prefix}-collapse-header {
+      padding-right: 40px;
+      padding-left: 12px;
+      .arrow {
+        right: 16px;
+        left: unset;
+      }
+    }
+  }
+}

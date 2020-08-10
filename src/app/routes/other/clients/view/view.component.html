@@ -1,0 +1,28 @@
+<div class="text-center py-lg">
+  <img src="{{ i.mp }}" class="icon-lg rounded-circle mb-lg" height="100" />
+  <h1 class="h2 mb0">{{ i.name }}</h1>
+  <div class="text-grey text-xs">@{{ i.user_name }}</div>
+  <div class="mt-sm">{{ i.company }}</div>
+  <div class="text-xs">{{ i.tel }}</div>
+  <div class="mt-md">
+    <a class="text-grey-dark text-hover"><i nz-icon nzType="mail" class="mr-sm"></i></a>
+    <a class="text-grey-dark text-hover"><i nz-icon nzType="wechat" class="mr-sm"></i></a>
+    <a class="text-grey-dark text-hover"><i nz-icon nzType="weibo-circle"></i></a>
+    <nz-divider nzType="vertical"></nz-divider>
+    <a class="text-grey-dark text-hover"><i nz-icon nzType="facebook" class="mr-sm"></i></a>
+    <a class="text-grey-dark text-hover"><i nz-icon nzType="twitter" class="mr-sm"></i></a>
+    <a class="text-grey-dark text-hover"><i nz-icon nzType="youtube"></i></a>
+  </div>
+</div>
+<div class="mt-lg p-lg border-top-1">
+  <h3 class="mb-md">Messages</h3>
+  <div class="no-data min-width-md" *ngIf="!i.messages || i.messages.length === 0">No messages</div>
+  <div *ngFor="let m of i.messages" class="p-sm mb-md border-1 rounded-sm">
+    {{ m.message }}
+    <div class="text-grey-dark">
+      {{ m.time }}
+      <nz-divider nzType="vertical" class="mx-sm"></nz-divider>
+      <a (click)="msg.success('Reply')">Reply</a>
+    </div>
+  </div>
+</div>

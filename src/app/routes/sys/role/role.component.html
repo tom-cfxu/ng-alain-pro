@@ -1,0 +1,54 @@
+<page-header-wrapper>
+  <div nz-row [nzGutter]="32">
+    <div nz-col nzMd="24" nzLg="8">
+      <nz-card [nzTitle]="'common.list' | translate" [nzExtra]="extraTpl">
+        <ng-template #extraTpl>
+          <button (click)="add(null)" nz-button nzSize="small">{{ 'common.add' | translate }}</button>
+        </ng-template>
+        <div *ngIf="data.length === 0">{{ 'common.no-data' | translate }}</div>
+        <nz-tree
+          *ngIf="data.length > 0"
+          [nzData]="data"
+          [nzDraggable]="true"
+          (nzClick)="show($event)"
+          (nzContextMenu)="showContextMenu($event, contextMenu)"
+          [nzBeforeDrop]="move"
+        >
+        </nz-tree>
+      </nz-card>
+    </div>
+    <div nz-col nzMd="24" nzLg="16" *ngIf="item && permission">
+      <nz-card nzTitle="编辑">
+        <form nz-form #f="ngForm" se-container="1" (ngSubmit)="save()">
+          <se label="名称" required>
+            <input nz-input [(ngModel)]="item.text" name="item.text" />
+          </se>
+          <se label="授权">
+            <nz-tree
+              [nzData]="permission"
+              [nzCheckedKeys]="item.permission"
+              nzExpandAll
+              [nzCheckable]="true"
+              [nzCheckStrictly]="true"
+            >
+            </nz-tree>
+          </se>
+          <se>
+            <button nz-button nzType="primary" [disabled]="f.invalid">保存</button>
+          </se>
+        </form>
+      </nz-card>
+    </div>
+  </div>
+</page-header-wrapper>
+<ng-template #contextMenu>
+  <ul nz-menu nzInDropDown>
+    <li nz-menu-item [nzDisabled]="delDisabled">
+      <div *ngIf="!delDisabled" nz-popconfirm nz-popconfirm [nzPopconfirmTitle]="delMsg" (nzOnConfirm)="del()">
+        删除
+      </div>
+      <div *ngIf="delDisabled">删除</div>
+    </li>
+    <li nz-menu-item (click)="add(item)">添加子项</li>
+  </ul>
+</ng-template>

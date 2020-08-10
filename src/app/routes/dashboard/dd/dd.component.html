@@ -1,0 +1,42 @@
+<div class="app-dd__op">
+  <ng-container *ngIf="design === false">
+    <div class="app-dd__op-btn" (click)="refresh()">
+      <i nz-icon nzType="reload"></i>
+    </div>
+    <div class="app-dd__op-btn" (click)="design = true">
+      <i nz-icon nzType="layout"></i>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="design === true">
+    <div class="app-dd__op-btn" (click)="showSettings()">
+      <i nz-icon nzType="plus"></i>
+    </div>
+    <div class="app-dd__op-btn" (click)="design = false">
+      <i nz-icon nzType="close"></i>
+    </div>
+    <div class="app-dd__op-btn" (click)="saveDesign()">
+      <i nz-icon nzType="check"></i>
+    </div>
+  </ng-container>
+</div>
+<div nz-row nzGutter="24" cdkDropListGroup>
+  <div cdkDropList [cdkDropListEnterPredicate]="enter" (cdkDropListDropped)="drop()" #placeholder></div>
+  <ng-container *ngFor="let i of widgets">
+    <div
+      *ngIf="i.enabled"
+      nz-col
+      [nzMd]="i.span_mobile"
+      [nzLg]="i.span_pc"
+      cdkDropList
+      [cdkDropListEnterPredicate]="enter"
+      (cdkDropListDropped)="drop()"
+    >
+      <div cdkDrag [cdkDragData]="i" class="app-dd__item" [ngClass]="{ 'app-dd__item-design': design }">
+        <dd-container [config]="i"></dd-container>
+        <div class="app-dd__item-btn app-dd__item-handle" cdkDragHandle>
+          <i nz-icon nzType="drag"></i>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

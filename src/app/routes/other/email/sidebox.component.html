@@ -1,0 +1,75 @@
+<ng-template #sidebox>
+  <div class="m-lg pb-md border-bottom-1">
+    <button routerLink="/other/email/compose" nz-button nzBlock nzType="primary" nzSize="large">Compose</button>
+  </div>
+  <div class="mx-lg">
+    <a
+      class="d-flex justify-content-between align-items-center text-grey-dark text-hover py-sm"
+      [ngClass]="{ 'font-weight-bold': type === 1 }"
+      (click)="changeType(1)"
+    >
+      <div><i nz-icon nzType="inbox" class="pr-sm"></i>Inbox</div>
+      <nz-badge [nzCount]="99"></nz-badge>
+    </a>
+    <a
+      class="d-flex justify-content-between align-items-center text-grey-dark text-hover py-sm"
+      [ngClass]="{ 'font-weight-bold': type === 2 }"
+      (click)="changeType(2)"
+    >
+      <div><i nz-icon nzType="mail" class="pr-sm"></i>Send</div>
+    </a>
+    <a
+      class="d-flex justify-content-between align-items-center text-grey-dark text-hover py-sm"
+      [ngClass]="{ 'font-weight-bold': type === 3 }"
+      (click)="changeType(3)"
+    >
+      <div><i nz-icon nzType="edit" class="pr-sm"></i>Drafts</div>
+    </a>
+    <a
+      class="d-flex justify-content-between align-items-center text-grey-dark text-hover py-sm"
+      [ngClass]="{ 'font-weight-bold': type === 4 }"
+      (click)="changeType(4)"
+    >
+      <div><i nz-icon nzType="folder" class="pr-sm"></i>Spam</div>
+    </a>
+    <a
+      class="d-flex justify-content-between align-items-center text-grey-dark text-hover py-sm"
+      [ngClass]="{ 'font-weight-bold': type === 5 }"
+      (click)="changeType(5)"
+    >
+      <div><i nz-icon nzType="delete" class="pr-sm"></i>Trash</div>
+    </a>
+  </div>
+  <div class="mx-lg mt-lg pt-lg border-top-1">
+    <div class="text-xs font-weight-bold">LABELS</div>
+    <ul class="list-unstyled mt-sm">
+      <li class="pt-sm text-hover point" (click)="msg.success('Processing')">
+        <nz-badge nzStatus="processing" nzText="Processing"></nz-badge>
+      </li>
+      <li class="pt-sm text-hover point" (click)="msg.success('Success')">
+        <nz-badge nzStatus="success" nzText="Success"></nz-badge>
+      </li>
+      <li class="pt-sm text-hover point" (click)="msg.success('Error')">
+        <nz-badge nzStatus="error" nzText="Error"></nz-badge>
+      </li>
+      <li class="pt-sm text-hover point" (click)="msg.success('Warning')">
+        <nz-badge nzStatus="warning" nzText="Warning"></nz-badge>
+      </li>
+    </ul>
+  </div>
+</ng-template>
+<div class="message__sidebox" *ngIf="!brand.isMobile">
+  <ng-template [ngTemplateOutlet]="sidebox"></ng-template>
+</div>
+<nz-drawer
+  *ngIf="brand.isMobile"
+  [nzWidth]="width"
+  nzWrapClassName="alain-pro__drawer"
+  [(nzVisible)]="visible"
+  [nzClosable]="false"
+  [nzMaskClosable]="true"
+  nzPlacement="left"
+  (nzOnClose)="close()"
+>
+  <ng-template [ngTemplateOutlet]="sidebox"></ng-template>
+</nz-drawer>

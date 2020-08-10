@@ -1,0 +1,43 @@
+<page-header-wrapper>
+  <div nz-row nzGutter="24" cdkDropListGroup>
+    <div nz-col *ngFor="let p of list" nzSm="24" nzMd="12" nzLg="6">
+      <nz-card
+        [nzTitle]="titleTpl"
+        class="ant-card__body-nopadding"
+        [ngStyle]="{ 'border-top-color': p.color, 'border-top-width': '4px', 'border-radius': '4px' }"
+      >
+        <ng-template #titleTpl>
+          <div class="text-center width-100">
+            <i nz-icon [nzType]="p.icon" nzTheme="fill" class="text-grey"></i>
+            {{ p.title }}
+          </div>
+        </ng-template>
+        <div class="px-sm pt-sm" cdkDropList [cdkDropListData]="p.list" (cdkDropListDropped)="drop($event)">
+          <div class="no-data" *ngIf="p.list.length === 0">No Data</div>
+          <div *ngFor="let i of p.list; let idx = index" cdkDrag class="p-sm mb-sm border-1">
+            <span nz-dropdown [nzDropdownMenu]="actionMenu" nzPlacement="bottomLeft" class="dd-btn float-right">
+              <i nz-icon nzType="ellipsis"></i>
+            </span>
+            <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item>Edit</li>
+                <li nz-menu-item (click)="del(p, i, idx)">Remove</li>
+              </ul>
+            </nz-dropdown-menu>
+            <h2 class="text-truncate text-md mb-xs">{{ i.title }}</h2>
+            <div *ngIf="i.content" class="text-grey mb-xs">{{ i.content }}</div>
+            <nz-tag *ngIf="i.attachement">
+              <i nz-icon nzType="file"></i>
+            </nz-tag>
+            <nz-tag *ngIf="i.label" [nzColor]="i.label.color">{{ i.label.text }}</nz-tag>
+          </div>
+        </div>
+        <div *ngIf="p.id <= 2" class="py-sm text-center border-top-1">
+          <button (click)="msg.success('add task')" nz-button class="btn-flat">
+            <i nz-icon nzType="plus"></i>Add task
+          </button>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</page-header-wrapper>

@@ -1,0 +1,94 @@
+<page-header-wrapper [loading]="!i">
+  <nz-card *ngIf="i" class="ant-card__body-nopadding">
+    <div #printEl class="p-lg">
+      <div nz-row>
+        <div nz-col nzSm="12">
+          <div class="d-flex align-items-center mb-lg">
+            <img src="./assets/logo-color.svg" alt="Alain" height="32" class="pr-sm" />
+            Ng Alain
+          </div>
+          <div class="mb-xs">{{ i.zone }}</div>
+          <div class="mb-xs">{{ i.address }}</div>
+          <div class="mb-xs">{{ i.tel }}</div>
+        </div>
+        <div nz-col nzSm="12" class="text-right">
+          <h1 class="text-xl">INVOICE #{{ i.id }}</h1>
+          <div class="mb-xs">
+            Date: <strong>{{ i.date | _date: 'DD MMM, YYYY' }}</strong>
+          </div>
+        </div>
+      </div>
+      <div nz-row class="mt-lg pt-md border-top-1">
+        <div nz-col nzSm="12">
+          <strong class="d-block pb-sm">Invoice To:</strong>
+          <div class="mb-xs">{{ i.to.company }}</div>
+          <div class="mb-xs">{{ i.to.zone }}</div>
+          <div class="mb-xs">{{ i.to.address }}</div>
+          <div class="mb-xs">{{ i.to.tel }}</div>
+          <div class="mb-xs">{{ i.to.email }}</div>
+        </div>
+        <div nz-col nzSm="12">
+          <strong class="d-block pb-sm">Payment Details:</strong>
+          <div class="d-flex flex-column">
+            <div class="d-flex mb-xs">
+              <span class="width-20">Total:</span>
+              <strong>{{ i.payment_total | _currency }}</strong>
+            </div>
+            <div class="d-flex mb-xs"><span class="width-20">Bank name:</span>{{ i.payment.bank }}</div>
+            <div class="d-flex mb-xs"><span class="width-20">Country:</span>{{ i.payment.country }}</div>
+            <div class="d-flex mb-xs"><span class="width-20">City:</span>{{ i.payment.city }}</div>
+            <div class="d-flex mb-xs"><span class="width-20">Address:</span>{{ i.payment.address }}</div>
+            <div class="d-flex mb-xs"><span class="width-20">Bank code:</span>{{ i.payment.code }}</div>
+          </div>
+        </div>
+      </div>
+      <nz-table [nzData]="i.wares" [nzShowPagination]="false" class="d-block mt-md">
+        <thead>
+          <tr>
+            <th>Product Information</th>
+            <th nzWidth="150px">Price</th>
+            <th nzWidth="150px">Num</th>
+            <th nzWidth="150px">Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of i.wares">
+            <td>
+              {{ i.title }}
+              <div class="text-grey text-truncate">{{ i.remark }}</div>
+            </td>
+            <td>{{ i.price | _currency }}</td>
+            <td>{{ i.num }}</td>
+            <td>{{ i.total | _currency }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-right">
+              <div class="mt-sm">
+                Subtotal:<strong class="pl-md">{{ i.total | _currency }}</strong>
+              </div>
+              <div class="mt-sm">
+                Tax({{ i.tax_rate * 100 }}%):<strong class="pl-md">{{ i.tax | _currency }}</strong>
+              </div>
+              <div class="mt-sm text-md">
+                Total:<strong class="pl-md">{{ i.payment_total | _currency }}</strong>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </nz-table>
+      <div class="m-md pt-lg text-grey"><strong class="pr-xs">Note:</strong>{{ i.note }}</div>
+    </div>
+    <div class="border-top-1 text-right p-md">
+      <button (click)="print()" nz-button nzSize="large">
+        <i nz-icon nzType="printer"></i>
+        Print
+      </button>
+      <button (click)="send()" nz-button nzSize="large" nzType="primary">
+        <i nz-icon nzType="rocket"></i>
+        Send
+      </button>
+    </div>
+  </nz-card>
+</page-header-wrapper>

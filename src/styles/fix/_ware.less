@@ -1,0 +1,64 @@
+.ware {
+  &__color {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+  }
+  &__imgs {
+    .se__label {
+      padding-right: 8px;
+    }
+    &-wrap {
+      display: flex;
+      align-items: center;
+    }
+    &-color {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    &-item {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      margin-right: @layout-gutter * 2;
+      border: 1px solid #ccc;
+      &-img {
+        width: 70px;
+        height: 70px;
+        img {
+          max-width: 100%;
+          max-height: 100%;
+        }
+      }
+      &-del {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        color: #fff;
+        line-height: normal;
+      }
+      &::before {
+        position: absolute;
+        top: 24px;
+        display: block;
+        width: 100%;
+        color: #ccc;
+        line-height: normal;
+        text-align: center;
+        content: '细节图';
+      }
+      &:first-child {
+        &::before {
+          content: '主图*';
+        }
+      }
+      &-exists {
+        &::before {
+          content: '';
+        }
+      }
+    }
+  }
+}

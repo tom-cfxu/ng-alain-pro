@@ -1,0 +1,45 @@
+<page-header-wrapper>
+  <div nz-row [nzGutter]="32">
+    <div nz-col nzMd="24" nzLg="8">
+      <nz-card [nzTitle]="'app.sys.permission.list' | translate" [nzExtra]="extraTpl">
+        <ng-template #extraTpl>
+          <button (click)="add(null)" nz-button nzSize="small">{{ 'app.sys.permission.root' | translate }}</button>
+        </ng-template>
+        <div *ngIf="data.length === 0">{{ 'common.no-data' | translate }}</div>
+        <div *ngIf="data.length > 0" scrollbar class="position-relative" style="height: 300px;">
+          <nz-tree
+            [nzData]="data"
+            [nzDraggable]="true"
+            (nzClick)="show($event)"
+            (nzContextMenu)="showContextMenu($event, contextMenu)"
+            [nzBeforeDrop]="move"
+          >
+          </nz-tree>
+        </div>
+      </nz-card>
+    </div>
+    <div nz-col nzMd="24" nzLg="16" *ngIf="op">
+      <nz-card [nzTitle]="op === 'view' ? '查看' : '编辑'">
+        <sv-container *ngIf="op === 'view'" col="2">
+          <sv label="父编号">{{ item.parent_id }}</sv>
+          <sv label="名称">{{ item.text }}</sv>
+          <sv label="代码">{{ item.code }}</sv>
+          <sv label="描述" col="1">{{ item.remark }}</sv>
+        </sv-container>
+        <sf *ngIf="op === 'edit'" [schema]="schema" [formData]="item" (formSubmit)="save($event)"></sf>
+      </nz-card>
+    </div>
+  </div>
+</page-header-wrapper>
+<ng-template #contextMenu>
+  <ul nz-menu nzInDropDown>
+    <li nz-menu-item (click)="edit()">修改</li>
+    <li nz-menu-item [nzDisabled]="delDisabled">
+      <div *ngIf="!delDisabled" nz-popconfirm nz-popconfirm [nzPopconfirmTitle]="delMsg" (nzOnConfirm)="del()">
+        删除
+      </div>
+      <div *ngIf="delDisabled">删除</div>
+    </li>
+    <li nz-menu-item (click)="add(item)">添加子项</li>
+  </ul>
+</ng-template>

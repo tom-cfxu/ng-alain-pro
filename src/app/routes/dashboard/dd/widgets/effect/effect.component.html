@@ -1,0 +1,24 @@
+<g2-card
+  [title]="'app.analysis.operational-effect' | translate"
+  total="78%"
+  contentHeight="45px"
+  [action]="action4"
+  [footer]="footer4"
+>
+  <ng-template #action4>
+    <i nz-tooltip [nzTooltipTitle]="'app.analysis.introduce' | translate" nz-icon nzType="info-circle"></i>
+  </ng-template>
+  <g2-mini-progress height="45" percent="78" strokeWidth="8" target="80" color="#13C2C2"></g2-mini-progress>
+  <ng-template #footer4>
+    <div class="d-flex justify-content-between text-truncate">
+      <trend flag="up">
+        {{ 'app.analysis.week' | translate }}
+        <span class="pl-sm">12%</span>
+      </trend>
+      <trend flag="down">
+        {{ 'app.analysis.day' | translate }}
+        <span class="pl-sm">11%</span>
+      </trend>
+    </div>
+  </ng-template>
+</g2-card>

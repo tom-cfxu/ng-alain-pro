@@ -1,0 +1,6 @@
+<page-header-wrapper [content]="phContent">
+  <ng-template #phContent>
+    <a href="https://github.com/cipchk/angular-baidu-maps" target="_blank">angular-baidu-maps</a>
+  </ng-template>
+  <abm-map #map (ready)="onReady($event)" style="height: 300px;"></abm-map>
+</page-header-wrapper>

@@ -1,0 +1,39 @@
+<ng-template #sidebox>
+  <div *ngFor="let i of list; let idx = index" class="faq-v1__item faq-v1__item-hover" (click)="to(idx)">
+    <i nz-icon [nzType]="i.icon" class="faq-v1__item-icon"></i>
+    <div class="ml-md">
+      <h2 class="faq-v1__item-title">{{ i.title }}</h2>
+      <p class="faq-v1__item-remark">{{ i.remark }}</p>
+    </div>
+  </div>
+  <div class="text-center mt-md">
+    <button (click)="msg.success('to')" nz-button nzType="danger">Contact Support</button>
+  </div>
+</ng-template>
+<page-header-wrapper [loading]="!list">
+  <div *ngIf="list" nz-row nzGutter="32" class="faq">
+    <div nz-col nzLg="6" nzMd="8">
+      <ng-container *ngIf="!brand.isMobile; else sidebox">
+        <nz-affix [nzOffsetTop]="brand.fixedHeader ? 80 : 24">
+          <ng-template [ngTemplateOutlet]="sidebox"></ng-template>
+        </nz-affix>
+      </ng-container>
+    </div>
+    <div nz-col nzLg="18" nzMd="16">
+      <div *ngFor="let i of list; let idx = index" class="mb-lg">
+        <div class="faq-v1__item" id="faq-panel-{{ idx }}">
+          <i nz-icon [nzType]="i.icon" class="faq-v1__item-icon icon-sm"></i>
+          <div class="ml-md">
+            <h2 class="faq-v1__item-title">{{ i.title }}</h2>
+            <p class="faq-v1__item-remark">{{ i.remark }}</p>
+          </div>
+        </div>
+        <nz-collapse class="mt-sm">
+          <nz-collapse-panel *ngFor="let v of i.children" [nzHeader]="v.q" [nzActive]="v.active">
+            <div [innerHTML]="v.a | html"></div>
+          </nz-collapse-panel>
+        </nz-collapse>
+      </div>
+    </div>
+  </div>
+</page-header-wrapper>

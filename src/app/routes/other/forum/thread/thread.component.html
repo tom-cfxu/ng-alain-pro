@@ -1,0 +1,60 @@
+<page-header-wrapper [loading]="!i" [title]="i ? i.category.title : 'loading'" [action]="action">
+  <ng-template #action>
+    <nz-input-group nzSearch [nzSuffix]="suffixButton">
+      <input type="text" nz-input placeholder="input search text" />
+    </nz-input-group>
+    <ng-template #suffixButton>
+      <button nz-button nzType="primary" nzSearch>Search</button>
+    </ng-template>
+  </ng-template>
+  <div class="mb-lg">
+    <button (click)="msg.success('new')" nz-button nzType="primary" nzSize="large">
+      <i nz-icon nzType="plus"></i>
+      New thread
+    </button>
+  </div>
+  <nz-table
+    *ngIf="i"
+    [nzData]="i.list"
+    [nzFrontPagination]="false"
+    [nzPageIndex]="s.pi"
+    [nzPageSize]="s.ps"
+    [nzTotal]="i.total"
+    class="ant-table-rep__hide-header-footer d-block bg-white"
+    (nzPageIndexChange)="load($event)"
+  >
+    <thead>
+      <tr>
+        <th class="bg-white"></th>
+        <th class="bg-white" nzWidth="100px">Replies</th>
+        <th class="bg-white" nzWidth="250px">Last update</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of i.list">
+        <td>
+          <span class="ant-table-rep__title">Title</span>
+          <div>
+            <a routerLink="/other/forum/{{ i.id }}" class="text-md">{{ i.title }}</a>
+            <nz-tag *ngIf="i.label" [nzColor]="i.label.color" class="ml-sm">{{ i.label.text }}</nz-tag>
+            <div class="text-grey">{{ i.last.time }}<span class="px-sm">·</span>{{ i.last.user_name }}</div>
+          </div>
+        </td>
+        <td>
+          <span class="ant-table-rep__title">Replies</span>
+          {{ i.replies }}
+        </td>
+        <td>
+          <span class="ant-table-rep__title">Last update</span>
+          <div *ngIf="i.last" class="d-flex">
+            <img src="{{ i.last.mp }}" height="32" class="rounded-circle" />
+            <div class="ml-sm">
+              <a class="d-block text-truncate width-sm" routerLink="/other/forum/{{ i.id }}">{{ i.last.user_name }}</a>
+              <div class="text-grey">{{ i.last.time }}</div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</page-header-wrapper>

@@ -1,0 +1,50 @@
+<page-grid [loading]="!i">
+  <ng-container *ngIf="i">
+    <div class="text-center">
+      <h1 class="pt-lg mb-md h1">Pricing plans</h1>
+      <p class="text-lg text-grey-dark">Choose the best plan that fits your needs</p>
+      <div class="d-flex justify-content-center text-md py-lg my-md">
+        <span>Billed monthly</span>
+        <nz-switch class="mx-sm" [ngModel]="_type" (ngModelChange)="typeChange($event)"></nz-switch>
+        <span class="text-green">Billed annually - Save 20%</span>
+      </div>
+      <div nz-row nzGutter="0" class="brand-bordered">
+        <div *ngFor="let i of i.prices; let idx = index" nz-col nzSm="24" nzMd="12" nzLg="8" class="p-lg">
+          <div class="my-md">
+            <i class="text-magenta icon-md" nz-icon [nzType]="i.icon"></i>
+          </div>
+          <h2>{{ i.title }}</h2>
+          <div class="my-lg">
+            <span>$</span>
+            <span class="display-1 font-weight-bold px-sm">{{ i[type] }}</span>
+            <span>/ {{ type }}</span>
+          </div>
+          <div class="text-md">
+            <p>{{ i.user === -1 ? 'Unlimited' : i.user }} users</p>
+            <p>{{ i.project === -1 ? 'Unlimited' : i.project }} projects</p>
+            <p>{{ i.space }} space</p>
+          </div>
+          <div class="pt-md">
+            <button
+              (click)="msg.success(i.id + '-' + type)"
+              nz-button
+              nzSize="large"
+              [nzType]="idx === 1 ? 'primary' : 'default'"
+            >
+              Get Started
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pt-lg mb-lg border-top-1" style="margin-top: 68px">
+      <h2 class="text-center py-lg">Frequently Asked Questions</h2>
+      <div nz-row nzGutter="32">
+        <div *ngFor="let i of i.faq" class="mb-md" nz-col nzSm="24" nzMd="12">
+          <h3 class="mb-sm">{{ i.q }}</h3>
+          <div class="text-grey-dark">{{ i.a }}</div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</page-grid>

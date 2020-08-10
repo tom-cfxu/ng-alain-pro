@@ -1,0 +1,134 @@
+<page-header-wrapper
+  [title]="id > 0 ? 'View Ware #' + id : ''"
+  [loading]="!i"
+  [logo]="phLogo"
+  [action]="phAction"
+  [extra]="phExtra"
+  [tab]="phTab"
+  [phContent]="phNgContent"
+>
+  <ng-template #phLogo>
+    <img src="{{ i.mp }}" />
+  </ng-template>
+  <ng-template #phAction>
+    <nz-button-group>
+      <button nz-button>评论</button>
+      <button nz-button>问答</button>
+    </nz-button-group>
+    <button
+      *ngIf="i.status === 'ON_SALE'"
+      nz-popconfirm
+      nzPopconfirmTitle="确定吗？"
+      (nzOnConfirm)="status('CUSTORMER_DOWN')"
+      nz-button
+      nzType="danger"
+      class="ml-sm"
+    >
+      下架
+    </button>
+    <button
+      *ngIf="i.status === 'CUSTORMER_DOWN'"
+      nz-popconfirm
+      nzPopconfirmTitle="确定吗？"
+      (nzOnConfirm)="status('ON_SALE')"
+      nz-button
+      nzType="danger"
+      class="ml-sm"
+    >
+      上架
+    </button>
+  </ng-template>
+  <ng-template #phExtra>
+    <div nz-row>
+      <div nz-col nzXs="24" nzSm="12">
+        <p class="text-grey">状态</p>
+        <p class="text-lg">{{ i.status }}</p>
+      </div>
+      <div nz-col nzXs="24" nzSm="12">
+        <p class="text-grey">金额</p>
+        <p class="text-lg">{{ i.price | _currency }}</p>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #phTab>
+    <nz-tabset [(nzSelectedIndex)]="tab">
+      <nz-tab nzTitle="详情"></nz-tab>
+      <nz-tab nzTitle="属性"></nz-tab>
+      <nz-tab nzTitle="描述"></nz-tab>
+    </nz-tabset>
+  </ng-template>
+  <ng-template #phNgContent>
+    <sv-container size="small" col="2">
+      <sv label="名称">{{ i.name }}</sv>
+      <sv label="货号">{{ i.outer_id }}</sv>
+      <sv label="市场价">{{ i.market_price | _currency }}</sv>
+      <sv label="销售价">{{ i.price | _currency }}</sv>
+      <sv label="30天销售量">{{ i.sale_num }} 件</sv>
+      <sv label="创建时间">{{ i.modified | _date }}</sv>
+    </sv-container>
+  </ng-template>
+  <ng-container *ngIf="tab === 0">
+    <nz-card nzTitle="Basic">
+      <div sv-container>
+        <sv col="1" label="类目">主类目 > 二级类目 > 三级类目</sv>
+        <sv label="名称">{{ i.name }}</sv>
+        <sv label="广告语">{{ i.ad_content }}</sv>
+        <sv label="加链接的文字">{{ i.ad_content_word }}</sv>
+        <sv label="链接地址">{{ i.ad_content_url }}</sv>
+        <sv label="品牌">{{ i.brand }}</sv>
+        <sv label="支持7天无理由退货"><span [innerHTML]="i.is_7return | yn"></span></sv>
+      </div>
+    </nz-card>
+    <nz-card nzTitle="Skus" *ngIf="i.skus && i.skus.length > 0" class="ant-card__body-nopadding">
+      <nz-table [nzData]="i.skus" [nzShowPagination]="false">
+        <thead>
+          <tr>
+            <th *ngFor="let p of i.properieNames"></th>
+            <th>销售价</th>
+            <th>库存</th>
+            <th>商家SKU(可不填)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of i.skus; let idx = index">
+            <td *ngFor="let n of getValidName(i.names)">{{ n }}</td>
+            <td>{{ i.price | _currency }}</td>
+            <td>{{ i.stock }}</td>
+            <td>{{ i.outer_id }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+    </nz-card>
+  </ng-container>
+  <ng-container *ngIf="tab === 1">
+    <nz-card nzTitle="Basic">
+      <div sv-container col="2">
+        <sv label="销售价">{{ i.price | _currency }}</sv>
+        <sv label="商品毛重">{{ i.weight }}</sv>
+        <sv label="货号">{{ i.outer_id }}</sv>
+        <sv label="产地">{{ i.place }}</sv>
+        <sv label="UPC编码">{{ i.upc_code }}</sv>
+      </div>
+    </nz-card>
+    <nz-card nzTitle="Basic">
+      <div sv-container col="2">
+        <sv label="是否有发票"><span [innerHTML]="i.invoice | yn"></span></sv>
+        <sv label="限制开增值税发票"><span [innerHTML]="i.can_vat | yn"></span></sv>
+        <sv label="是否有保修"><span [innerHTML]="i.guarantee | yn"></span></sv>
+        <sv label="自定义微信分享内容"><span [innerHTML]="i.is_wx_share | yn"></span></sv>
+        <sv label="微信分享内容" col="1" *ngIf="i.is_wx_share">{{ i.wx_share_desc }}</sv>
+      </div>
+    </nz-card>
+  </ng-container>
+  <ng-container *ngIf="tab === 2">
+    <nz-card>
+      <div [innerHTML]="i.desc | html"></div>
+    </nz-card>
+    <nz-card nzTitle="其它">
+      <div sv-container col="1">
+        <sv label="包装清单"><span [innerHTML]="i.pack_listing | html"></span></sv>
+        <sv label="售后服务"><span [innerHTML]="i.service | html"></span></sv>
+      </div>
+    </nz-card>
+  </ng-container>
+</page-header-wrapper>

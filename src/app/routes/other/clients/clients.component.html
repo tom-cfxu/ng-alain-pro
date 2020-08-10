@@ -1,0 +1,51 @@
+<page-header-wrapper [loading]="!list" [action]="action">
+  <ng-template #action>
+    <nz-input-group [nzSuffix]="suffixIconSearch" class="max-width-sm">
+      <input type="text" [(ngModel)]="s.q" delay (delayChange)="load()" nz-input placeholder="title..." />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+  </ng-template>
+  <nz-card *ngIf="list">
+    <nz-table
+      #nzTable
+      [nzData]="list"
+      [nzFrontPagination]="false"
+      [nzPageIndex]="s.pi"
+      [nzPageSize]="s.ps"
+      [nzTotal]="total"
+      class="ant-table-rep__hide-header-footer"
+      (nzPageIndexChange)="load($event)"
+    >
+      <tbody>
+        <tr *ngFor="let i of nzTable.data" class="point" (click)="show(i)">
+          <td>
+            <span class="ant-table-rep__title">Avatar</span>
+            <nz-avatar [nzSrc]="i.mp"></nz-avatar>
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Name</span>
+            {{ i.name }}
+            <div class="text-grey text-xs">@{{ i.user_name }}</div>
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Company</span>
+            {{ i.company }}
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Email</span>
+            {{ i.email }}
+            <div>{{ i.tel }}</div>
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Status</span>
+            <nz-badge *ngIf="i.status === 'pending'" nzStatus="warning" nzText="Pending"></nz-badge>
+            <nz-badge *ngIf="i.status === 'active'" nzStatus="success" nzText="Active"></nz-badge>
+            <nz-badge *ngIf="i.status === 'progress'" nzStatus="processing" nzText="Processing"></nz-badge>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</page-header-wrapper>

@@ -1,0 +1,58 @@
+<page-header-wrapper [loading]="!list">
+  <div *ngIf="list" nz-row nzGutter="32">
+    <div *ngFor="let i of list" nz-col nzSm="12" nzXl="8">
+      <nz-card class="ant-card__body-nopadding">
+        <div class="d-flex justify-content-between align-items-start px-md pt-md">
+          <div>
+            <a routerLink="/other/project/{{ i.id }}" class="text-md pr-sm">{{ i.title }}</a>
+            <nz-tag *ngIf="i.status === 'active'" nzColor="green">Active</nz-tag>
+            <nz-tag *ngIf="i.status === 'pending'" nzColor="orange">Pending</nz-tag>
+            <nz-tag *ngIf="i.status === 'complete'" nzColor="blue">Complete</nz-tag>
+            <div class="text-grey text-xs mt-xs">
+              {{ i.task.opened }} opened tasks, {{ i.task.completed }} tasks completed
+            </div>
+          </div>
+          <span nz-dropdown [nzDropdownMenu]="actionMenu" nzPlacement="bottomRight" class="dd-btn">
+            <i nz-icon nzType="ellipsis"></i>
+          </span>
+          <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+            <ul nz-menu>
+              <li nz-menu-item routerLink="/other/project/{{ i.id }}">View</li>
+              <li nz-menu-item (click)="msg.success('edit')">Edit</li>
+              <li nz-menu-item nz-popconfirm nzPopconfirmTitle="确定吗？" (nzOnConfirm)="del(i, idx)">
+                Remove
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+        <nz-progress
+          [nzPercent]="i.task.process"
+          [nzStatus]="i.status"
+          [nzShowInfo]="false"
+          nzStrokeWidth="3"
+          nzSize="small"
+        ></nz-progress>
+        <div class="px-md text-xs">
+          <strong class="pr-xs">{{ i.task.process }}%</strong>completed
+        </div>
+        <div class="px-md pt-md overflow-hidden" style="height: 70px">{{ i.remark }}</div>
+        <div class="px-md pb-md d-flex align-items-start">
+          <div class="width-50">
+            <div class="text-grey text-sm">Created</div>
+            <strong>{{ i.created | _date: 'MM/DD/YYYY' }}</strong>
+          </div>
+          <div class="width-50">
+            <div class="text-grey text-sm">Deadline</div>
+            <strong>{{ i.deadline | _date: 'MM/DD/YYYY' }}</strong>
+          </div>
+        </div>
+        <div class="p-md border-top-1">
+          <div class="text-grey text-sm pb-sm">Team</div>
+          <avatar-list size="small">
+            <avatar-list-item *ngFor="let u of i.tean" [tips]="u.name" [src]="u.mp"></avatar-list-item>
+          </avatar-list>
+        </div>
+      </nz-card>
+    </div>
+  </div>
+</page-header-wrapper>

@@ -1,0 +1,90 @@
+<page-header-wrapper [loading]="!i" [title]="title" [breadcrumb]="breadcrumb" [action]="action">
+  <ng-template #title>
+    {{ i ? i.title : 'loading' }}
+    <nz-tag *ngIf="i && i.label" [nzColor]="i.label.color" class="ml-sm">{{ i.label.text }}</nz-tag>
+  </ng-template>
+  <ng-template #breadcrumb>
+    <nz-breadcrumb *ngIf="i">
+      <nz-breadcrumb-item><a routerLink="/">home</a></nz-breadcrumb-item>
+      <nz-breadcrumb-item>{{ 'menu.pages' | i18n }}</nz-breadcrumb-item>
+      <nz-breadcrumb-item
+        ><a routerLink="/other/forum">{{ 'menu.other.forum' | i18n }}</a></nz-breadcrumb-item
+      >
+      <nz-breadcrumb-item
+        ><a routerLink="/other/forum/thread/{{ i.category.id }}">{{ i.category.title }}</a></nz-breadcrumb-item
+      >
+    </nz-breadcrumb>
+  </ng-template>
+  <ng-template #action>
+    <nz-input-group nzSearch [nzSuffix]="suffixButton">
+      <input type="text" nz-input placeholder="input search text" />
+    </nz-input-group>
+    <ng-template #suffixButton>
+      <button nz-button nzType="primary" nzSearch>Search</button>
+    </ng-template>
+  </ng-template>
+  <ng-container *ngIf="i">
+    <div class="bg-white mb-md">
+      <div class="d-flex flex-wrap align-items-center px-lg py-md">
+        <img src="{{ i.user.mp }}" height="32" class="rounded-circle" />
+        <div class="flex-1 ml-md">
+          <a href="javascript:void(0)">{{ i.user.name }}</a>
+          <div class="text-grey">{{ i.time }}</div>
+        </div>
+        <div class="ml-md text-grey">
+          <div>Member since 11/11/2018</div>
+          <div>
+            <strong class="pr-sm">{{ i.replies | number }}</strong
+            >posts
+          </div>
+        </div>
+      </div>
+      <div [innerHTML]="i.desc | html" class="p-lg border-top-1 border-bottom-1"></div>
+      <div class="d-flex flex-wrap justify-content-between align-items-center p-md">
+        <div>
+          <a (click)="msg.success('like')" class="text-grey">
+            <i nz-icon nzType="heart" class="text-red text-md"></i>
+            {{ i.like }}
+          </a>
+          <span class="text-grey pl-lg">
+            <i nz-icon nzType="eye" class="text-md"></i>
+            {{ i.view }}
+          </span>
+        </div>
+        <button (click)="msg.success('reply')" nz-button nzType="primary"><i nz-icon nzType="edit"></i>Reply</button>
+      </div>
+    </div>
+    <div id="replies"></div>
+    <div *ngFor="let i of replies" class="bg-white mb-md p-lg d-flex">
+      <img src="{{ i.user.mp }}" height="32" class="rounded-circle" />
+      <div class="flex-1 ml-md">
+        <div class="d-flex justify-content-between align-items-center text-grey">
+          <div>
+            <a href="javascript:void(0)">{{ i.user.name }}</a>
+            <div class="text-grey">Member since 11/11/2018<span class="px-sm">·</span>{{ i.user.posts }} posts</div>
+          </div>
+          {{ i.time }}
+        </div>
+        <div [innerHTML]="i.content" class="py-sm"></div>
+        <div class="d-flex align-items-center text-grey">
+          <span class="text-grey text-hover point" (click)="msg.success('Reply')">Reply</span>
+          <span class="text-grey text-hover point ml-md" (click)="msg.success('like')">
+            <i nz-icon nzType="like"></i> {{ i.like }}
+          </span>
+          <span class="text-grey text-hover point ml-md" (click)="msg.success('dislike')">
+            <i nz-icon nzType="dislike"></i> {{ i.dislike }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-md">
+      <nz-pagination
+        [(nzPageIndex)]="s.pi"
+        (nzPageIndexChange)="loadReplies(true)"
+        [nzPageSize]="s.ps"
+        [nzTotal]="total"
+        nzHideOnSinglePage
+      ></nz-pagination>
+    </div>
+  </ng-container>
+</page-header-wrapper>

@@ -1,0 +1,31 @@
+<page-grid [title]="'New message'" noSpacing>
+  <div class="message__container">
+    <email-sidebox [(visible)]="menuVisible"></email-sidebox>
+    <div class="d-flex flex-column width-100">
+      <div class="flex-grow-1">
+        <div class="message__content">
+          <h4 class="d-flex align-items-center px-lg pt-lg pb-md border-bottom-1 h4 font-weight-bold">
+            <a (click)="menuVisible = true" class="hidden-pc">
+              <i nz-icon nzType="ellipsis" class="rotate-90 text-grey-dark mr-md"></i>
+            </a>
+            New message
+          </h4>
+          <div class="m-lg">
+            <sf #sf layout="vertical" [schema]="schema" [formData]="item" (formSubmit)="save($event)" [button]="null">
+              <div class="text-right">
+                <button type="submit" nz-button [disabled]="!sf.valid" nzSize="large" nzType="primary">
+                  <i nz-icon nzType="rocket"></i>
+                  Send
+                </button>
+                <button type="submit" nz-button [disabled]="!sf.valid" nzSize="large">
+                  Save
+                </button>
+                <button routerLink="/other/email" type="button" nz-button nzSize="large">Cancel</button>
+              </div>
+            </sf>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</page-grid>

@@ -1,0 +1,74 @@
+@app-dd-prefix: ~'.app-dd';
+
+@{app-dd-prefix} {
+  position: relative;
+  display: block;
+  &__op {
+    position: absolute;
+    top: -@alain-pro-content-margin;
+    right: 24px;
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      margin-left: 8px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 0 0 4px 4px;
+      cursor: pointer;
+      pointer-events: auto;
+      &:hover {
+        background: rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+  &__ph {
+    opacity: 0.3;
+  }
+  &__item {
+    position: relative;
+    display: block;
+    &-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: rgba(0, 0, 0, 0.02);
+      cursor: pointer;
+    }
+    &:hover {
+      @{app-dd-prefix}__item-refresh {
+        display: flex;
+      }
+    }
+    &-design {
+      opacity: 0.8;
+      user-select: none;
+      @{app-dd-prefix}__item-handle {
+        display: flex !important;
+        background: rgba(0, 0, 0, 0.1);
+      }
+      @{app-dd-prefix}__item-refresh {
+        display: none !important;
+      }
+    }
+    &.cdk-drag-preview {
+      border-radius: 4px;
+      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    }
+    &.cdk-drag-animating {
+      transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+  }
+}

@@ -1,0 +1,33 @@
+<page-header-wrapper [loading]="!list">
+  <div *ngIf="list" nz-row nzGutter="32">
+    <div *ngFor="let i of list" nz-col nzMd="24" nzLg="12" nzXl="8">
+      <nz-card class="text-center position-relative">
+        <img src="{{ i.mp }}" class="icon-lg rounded-circle mb-lg" height="100" />
+        <h1 class="h2 mb0">{{ i.name }}</h1>
+        <div class="text-grey text-xs">@{{ i.user_name }}</div>
+        <div class="mt-sm">{{ i.company }}</div>
+        <div class="text-xs">{{ i.tel }}</div>
+        <div class="mt-md pt-md border-top-1">
+          <a class="text-grey-dark text-hover"><i nz-icon nzType="mail" class="mr-sm"></i></a>
+          <a class="text-grey-dark text-hover"><i nz-icon nzType="wechat" class="mr-sm"></i></a>
+          <a class="text-grey-dark text-hover"><i nz-icon nzType="weibo-circle"></i></a>
+          <nz-divider nzType="vertical"></nz-divider>
+          <a class="text-grey-dark text-hover"><i nz-icon nzType="facebook" class="mr-sm"></i></a>
+          <a class="text-grey-dark text-hover"><i nz-icon nzType="twitter" class="mr-sm"></i></a>
+          <a class="text-grey-dark text-hover"><i nz-icon nzType="youtube"></i></a>
+        </div>
+        <span nz-dropdown [nzDropdownMenu]="actionMenu" nzPlacement="bottomRight" class="dd-btn brand-top-right">
+          <i nz-icon nzType="ellipsis"></i>
+        </span>
+        <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="msg.success('edit')">Edit</li>
+            <li nz-menu-item nz-popconfirm nzPopconfirmTitle="确定吗？" (nzOnConfirm)="del(i, idx)">
+              Remove
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </nz-card>
+    </div>
+  </div>
+</page-header-wrapper>

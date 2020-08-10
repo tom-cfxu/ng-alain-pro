@@ -1,0 +1,78 @@
+<page-grid [loading]="!i" [title]="i ? i.title : 'loading'" noSpacing>
+  <div *ngIf="i" class="message__container">
+    <email-sidebox [(visible)]="menuVisible"></email-sidebox>
+    <div class="d-flex flex-column width-100">
+      <div class="flex-grow-1">
+        <div class="message__content">
+          <div class="d-flex align-items-center px-lg pt-lg pb-md">
+            <a (click)="menuVisible = true" class="hidden-pc">
+              <i nz-icon nzType="ellipsis" class="rotate-90 text-grey-dark mr-md"></i>
+            </a>
+            <img src="{{ i.mp }}" class="d-block rounded-circle" height="32" />
+            <div class="flex-1 pl-md">
+              {{ i.from_name }} &lt;<a>{{ i.from }}</a
+              >&gt;
+              <span class="text-grey pl-sm">{{ i.time }}</span>
+              <h1 class="text-sm mb0">{{ i.subject }}</h1>
+            </div>
+          </div>
+          <div class="message__tools">
+            <div class="message__tools-choose">
+              <button (click)="back()" nz-tooltip="Back" nz-button nzSize="small" class="btn-flat my-sm">
+                <i nz-icon nzType="arrow-left"></i>
+              </button>
+              <button nz-tooltip="Mark as unread" nz-button nzSize="small" class="btn-flat m-sm">
+                <i nz-icon nzType="folder"></i>
+              </button>
+              <button nz-tooltip="Mark as important" nz-button nzSize="small" class="btn-flat m-sm">
+                <i nz-icon nzType="exclamation-circle" theme="fill"></i>
+              </button>
+              <button nz-tooltip="Move to spam" nz-button nzSize="small" class="btn-flat m-sm">
+                <i nz-icon nzType="folder"></i>
+              </button>
+              <button nz-tooltip="Move to trash" nz-button nzSize="small" class="btn-flat m-sm">
+                <i nz-icon nzType="delete"></i>
+              </button>
+            </div>
+            <div class="d-flex flex-wrap" style="margin-left: auto !important;">
+              <button (click)="msg.success('Reply')" nz-button nzSize="small" class="btn-flat m-sm">
+                <i nz-icon nzType="rollback"></i> Reply
+              </button>
+            </div>
+          </div>
+          <div class="p-lg" [innerHTML]="i.desc | html"></div>
+          <div class="border-top-1 p-lg">
+            <div class="text-xs mb-sm">Attachements</div>
+            <div nz-row nzGutter="24">
+              <div *ngFor="let f of i.attachements" nz-col nzLg="12" nzXl="8">
+                <div class="attachment">
+                  <div
+                    *ngIf="f.type === 'jpg'"
+                    class="attachment-img"
+                    [ngStyle]="{ 'background-image': 'url(' + f.url + ')' }"
+                  ></div>
+                  <div *ngIf="f.type !== 'jpg'" class="attachment-icon">
+                    <i nz-icon nzType="file-{{ f.type }}"></i>
+                  </div>
+                  <div class="ml-sm">
+                    <div class="font-weight-bold text-truncate">{{ f.filename }}</div>
+                    <div class="text-xs text-grey">{{ f.size }}</div>
+                    <div>
+                      <a (click)="msg.success('view')" *ngIf="f.type === 'jpg'" class="pr-sm">View</a>
+                      <a [href]="f.url | url" target="_blank">Download</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-top-1 p-lg text-right">
+            <button (click)="msg.success('Reply')" nz-button nzSize="large" nzType="primary">
+              <i nz-icon nzType="rollback"></i> Reply
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</page-grid>

@@ -1,0 +1,127 @@
+<page-header-wrapper [title]="id > 0 ? 'Edit Ware #' + id : 'Add Ware'" [loading]="!i">
+  <form *ngIf="i != null" nz-form #f="ngForm" (ngSubmit)="save()" class="sf__no-error">
+    <nz-card nzTitle="Basic">
+      <div se-container>
+        <se col="1" label="类目" required>
+          主类目 > 二级类目 > 三级类目
+          <button (click)="msg.success('yes')" nz-button nzSize="small" class="pl-sm">重选</button>
+        </se>
+        <se label="名称" required error="必填项">
+          <input nz-input [(ngModel)]="i.name" name="name" required maxlength="50" />
+        </se>
+        <se label="广告语">
+          <input nz-input [(ngModel)]="i.ad_content" name="ad_content" maxlength="50" />
+        </se>
+        <se label="加链接的文字">
+          <input nz-input [(ngModel)]="i.ad_content_word" name="ad_content_word" maxlength="30" />
+        </se>
+        <se label="链接地址">
+          <input
+            nz-input
+            [(ngModel)]="i.ad_content_url"
+            name="ad_content_url"
+            maxlength="100"
+            placeholder="必须是ng-alain.com的链接地址"
+          />
+        </se>
+        <se label="品牌" error="必填项">
+          <nz-select [(ngModel)]="i.brand" name="brand" required>
+            <nz-option nzLabel="品牌1" [nzValue]="1"></nz-option>
+            <nz-option nzLabel="品牌2" [nzValue]="2"></nz-option>
+            <nz-option nzLabel="品牌3" [nzValue]="3"></nz-option>
+          </nz-select>
+        </se>
+        <se label="">
+          <label nz-checkbox [(ngModel)]="i.is_7return" name="is_7return">支持7天无理由退货</label>
+        </se>
+      </div>
+    </nz-card>
+    <nz-card nzTitle="Property">
+      <div se-container>
+        <se label="蓝帽标识" required error="必填项" *ngIf="i.brand === 2">
+          <input nz-input [(ngModel)]="i.prop['1']" name="prop['1']" maxlength="50" required />
+        </se>
+        <se label="保质期" required error="必填项">
+          <input nz-input [(ngModel)]="i.prop['2']" name="prop['2']" maxlength="50" required />
+        </se>
+        <se label="净重" required error="必填项">
+          <input nz-input [(ngModel)]="i.prop['3']" name="prop['3']" maxlength="50" required />
+        </se>
+      </div>
+    </nz-card>
+    <nz-card nzTitle="Information">
+      <div se-container>
+        <se label="销售价" required error="必填项">
+          <nz-input-number [(ngModel)]="i.price" name="price" required></nz-input-number>
+        </se>
+        <se label="商品毛重" required error="必填项">
+          <nz-input-number [(ngModel)]="i.weight" name="weight" required nzPlaceHolder="单位：公斤"></nz-input-number>
+        </se>
+        <se label="货号">
+          <input nz-input [(ngModel)]="i.outer_id" name="outer_id" maxlength="50" />
+        </se>
+        <se label="产地">
+          <nz-select [(ngModel)]="i.place" name="place">
+            <nz-option nzLabel="中国" [nzValue]="1"></nz-option>
+            <nz-option nzLabel="中国台湾" [nzValue]="2"></nz-option>
+            <nz-option nzLabel="中国香港" [nzValue]="3"></nz-option>
+            <nz-option nzLabel="中国澳门" [nzValue]="4"></nz-option>
+            <nz-option nzLabel="俄罗斯" [nzValue]="5"></nz-option>
+            <nz-option nzLabel="巴基斯坦" [nzValue]="6"></nz-option>
+            <nz-option nzLabel="美国" [nzValue]="7"></nz-option>
+          </nz-select>
+        </se>
+        <se label="UPC编码">
+          <input nz-input [(ngModel)]="i.upc_code" name="upc_code" maxlength="50" />
+        </se>
+        <se label="所在地">
+          <address [(ngModel)]="i.geo" name="geo"></address>
+        </se>
+      </div>
+    </nz-card>
+    <app-ec-ware-edit-sku></app-ec-ware-edit-sku>
+    <app-ec-ware-edit-img></app-ec-ware-edit-img>
+    <nz-card nzTitle="Function">
+      <div se-container>
+        <se label="">
+          <label nz-checkbox [(ngModel)]="i.invoice" name="invoice">是否有发票</label>
+        </se>
+        <se label="">
+          <label nz-checkbox [(ngModel)]="i.can_vat" name="can_vat">限制开增值税发票</label>
+        </se>
+        <se label="">
+          <label nz-checkbox [(ngModel)]="i.guarantee" name="guarantee">是否有保修</label>
+        </se>
+        <se label="">
+          <label nz-checkbox [(ngModel)]="i.is_wx_share" name="is_wx_share">自定义微信分享内容</label>
+        </se>
+        <se *ngIf="i.is_wx_share" label="微信分享内容" col="1" required>
+          <input nz-input [(ngModel)]="i.wx_share_desc" name="wx_share_desc" required maxlength="50" />
+        </se>
+      </div>
+    </nz-card>
+    <nz-card nzTitle="Description">
+      <div se-container="1">
+        <se label="商品文描" required error="必填项">
+          <editor [(ngModel)]="i.desc" name="desc" required></editor>
+        </se>
+        <se label="包装清单">
+          <textarea
+            nz-input
+            [(ngModel)]="i.pack_listing"
+            name="pack_listing"
+            [nzAutosize]="true"
+            maxlength="200"
+          ></textarea>
+        </se>
+        <se label="售后服务">
+          <textarea nz-input [(ngModel)]="i.service" name="service" [nzAutosize]="true" maxlength="200"></textarea>
+        </se>
+      </div>
+    </nz-card>
+    <footer-toolbar>
+      <button type="submit" nz-button nzType="primary" [disabled]="f.invalid">Save changes</button>
+      <button type="button" nz-button (click)="cancel()">Cancel</button>
+    </footer-toolbar>
+  </form>
+</page-header-wrapper>

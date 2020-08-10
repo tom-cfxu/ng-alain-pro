@@ -1,0 +1,56 @@
+<nz-card [nzTitle]="imgTitle">
+  <ng-template #imgTitle> Images<small class="pl-md text-grey">拖动可修改顺序</small> </ng-template>
+  <div se-container="1" class="ware__imgs">
+    <se *ngFor="let i of ls; let index = index" [label]="labelTpl">
+      <ng-template #labelTpl>
+        <ng-container *ngIf="i.id > 0">
+          <i class="ware__color" [ngStyle]="{ background: i.color }"></i>
+          {{ i.text }}
+        </ng-container>
+        <ng-container *ngIf="i.id <= 0">商品图片</ng-container>
+      </ng-template>
+      <div class="ware__imgs-wrap">
+        <div
+          class="ware__imgs-color"
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          (cdkDropListDropped)="drop(i.ls, $event)"
+        >
+          <div
+            *ngFor="let src of i.ls; let idx = index"
+            cdkDrag
+            class="ware__imgs-item"
+            [ngClass]="{ 'ware__imgs-item-exists': !!src }"
+          >
+            <div class="ware__imgs-item-img">
+              <img src="{{ src }}" *ngIf="src" />
+            </div>
+            <a
+              *ngIf="src"
+              class="ware__imgs-item-del"
+              nz-popconfirm
+              nzPopconfirmTitle="确定吗？"
+              (nzOnConfirm)="del(i, idx)"
+            >
+              <i nz-icon nzType="delete"></i>
+            </a>
+          </div>
+        </div>
+        <button
+          dialog-img
+          [multiple]="5"
+          (selected)="cho(i, $event)"
+          nz-button
+          type="button"
+          nzType="primary"
+          nzSize="small"
+        >
+          选择照片
+        </button>
+        <button (click)="copy(i)" nz-button type="button" nzSize="small" nzType="dashed" *ngIf="i.id > 0 && index > 0">
+          复制商品图片
+        </button>
+      </div>
+    </se>
+  </div>
+</nz-card>

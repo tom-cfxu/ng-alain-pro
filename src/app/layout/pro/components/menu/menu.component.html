@@ -1,0 +1,111 @@
+<ng-template #icon let-i>
+  <ng-container *ngIf="i" [ngSwitch]="i.type">
+    <i *ngSwitchCase="'icon'" nz-icon [nzType]="i.value" class="alain-pro__menu-icon"></i>
+    <img *ngSwitchCase="'img'" src="{{ i.value }}" class="anticon alain-pro__menu-icon alain-pro__menu-img" />
+    <i *ngSwitchDefault class="anticon alain-pro__menu-icon {{ i.value }}"></i>
+  </ng-container>
+</ng-template>
+<ng-template #mainLink let-i>
+  <ng-template [ngTemplateOutlet]="icon" [ngTemplateOutletContext]="{ $implicit: i.icon }"></ng-template>
+  <span class="alain-pro__menu-title-text" *ngIf="!pro.onlyIcon">{{ i.text }}</span>
+  <div *ngIf="i.badge" title="{{ i.badge }}" class="alain-pro__menu-title-badge badge">
+    <em>{{ i.badge }}</em>
+  </div>
+</ng-template>
+<ng-template #subLink let-i>
+  <a *ngIf="!i.externalLink" [routerLink]="i.link" [target]="i.target">{{ i.text }} </a>
+  <a *ngIf="i.externalLink" [attr.href]="i.externalLink" [attr.target]="i.target">{{ i.text }} </a>
+</ng-template>
+<ul
+  *ngIf="menus"
+  nz-menu
+  [nzMode]="mode"
+  [nzTheme]="pro.theme"
+  [nzInlineCollapsed]="pro.isMobile ? false : pro.collapsed"
+>
+  <ng-container *ngFor="let l1 of menus">
+    <li
+      *ngIf="l1.children.length === 0"
+      nz-menu-item
+      class="alain-pro__menu-item"
+      [class.alain-pro__menu-item--disabled]="l1.disabled"
+      [nzSelected]="l1._selected"
+      [nzDisabled]="l1.disabled"
+    >
+      <a
+        *ngIf="!l1.externalLink"
+        [routerLink]="l1.link"
+        [target]="l1.target"
+        (click)="closeCollapsed()"
+        class="alain-pro__menu-title"
+      >
+        <ng-template [ngTemplateOutlet]="mainLink" [ngTemplateOutletContext]="{ $implicit: l1 }"></ng-template>
+      </a>
+      <a
+        *ngIf="l1.externalLink"
+        [attr.href]="l1.externalLink"
+        [attr.target]="l1.target"
+        (click)="closeCollapsed()"
+        class="alain-pro__menu-title"
+      >
+        <ng-template [ngTemplateOutlet]="mainLink" [ngTemplateOutletContext]="{ $implicit: l1 }"></ng-template>
+      </a>
+    </li>
+    <li
+      *ngIf="l1.children.length > 0"
+      nz-submenu
+      class="alain-pro__menu-item"
+      [class.text-white]="pro.theme === 'dark' && l1._selected"
+      [nzOpen]="l1._open"
+      [nzDisabled]="l1.disabled"
+      (nzOpenChange)="openChange(l1, $event)"
+    >
+      <span title class="alain-pro__menu-title">
+        <ng-template [ngTemplateOutlet]="icon" [ngTemplateOutletContext]="{ $implicit: l1.icon }"></ng-template>
+        <span class="alain-pro__menu-title-text" *ngIf="pro.isMobile || !pro.onlyIcon">{{ l1.text }}</span>
+        <div *ngIf="l1.badge" title="{{ l1.badge }}" class="alain-pro__menu-title-badge badge">
+          <em>{{ l1.badge }}</em>
+        </div>
+      </span>
+      <ul>
+        <ng-container *ngFor="let l2 of l1.children">
+          <li
+            *ngIf="!l2._hidden && l2.children.length === 0"
+            nz-menu-item
+            [class.alain-pro__menu-item--disabled]="l2.disabled"
+            [nzSelected]="l2._selected"
+            [nzDisabled]="l2.disabled"
+            (click)="closeCollapsed()"
+          >
+            <ng-template [ngTemplateOutlet]="subLink" [ngTemplateOutletContext]="{ $implicit: l2 }"></ng-template>
+          </li>
+          <li
+            *ngIf="!l2._hidden && l2.children.length > 0"
+            nz-submenu
+            [nzOpen]="l2._open"
+            [nzDisabled]="l2.disabled"
+            (nzOpenChange)="openChange(l2, $event)"
+          >
+            <span title
+              ><span>{{ l2.text }}</span></span
+            >
+            <ul>
+              <ng-container *ngFor="let l3 of l2.children">
+                <li
+                  *ngIf="!l3._hidden"
+                  nz-menu-item
+                  [class.alain-pro__menu-item--disabled]="l3.disabled"
+                  [nzSelected]="l3._selected"
+                  [nzDisabled]="l3.disabled"
+                  (click)="closeCollapsed()"
+                >
+                  <ng-template [ngTemplateOutlet]="subLink" [ngTemplateOutletContext]="{ $implicit: l3 }"></ng-template>
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+        </ng-container>
+      </ul>
+    </li>
+  </ng-container>
+</ul>

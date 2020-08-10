@@ -1,0 +1,113 @@
+<div class="p-md border-bottom-1">
+  <button (click)="changeType(0)" nz-button [nzType]="type === 0 ? 'primary' : 'default'">Notifications</button>
+  <button (click)="changeType(1)" nz-button [nzType]="type === 1 ? 'primary' : 'default'">Actions</button>
+  <button (click)="changeType(2)" nz-button [nzType]="type === 2 ? 'primary' : 'default'">Settings</button>
+</div>
+<nz-spin [nzSpinning]="!data">
+  <div *ngIf="!data" class="brand-page-loading"></div>
+  <div *ngIf="data" class="p-lg min-width-lg">
+    <nz-timeline *ngIf="type === 0" class="d-block pl-md pt-md">
+      <nz-timeline-item *ngFor="let i of data.notifications" [nzDot]="dotTpl">
+        <ng-template #dotTpl>
+          <div class="md-sm p-sm icon-sm rounded-circle text-white bg-{{ i.dot.bg }}">
+            <i nz-icon [nzType]="i.dot.icon"></i>
+          </div>
+        </ng-template>
+        <div class="pl-lg">
+          <strong>{{ i.time }}</strong>
+          <div class="py-sm" [innerHTML]="i.content | html"></div>
+          <div class="text-grey">{{ i.tags }}</div>
+        </div>
+      </nz-timeline-item>
+    </nz-timeline>
+    <ng-container *ngIf="type === 1">
+      <div
+        *ngFor="let i of data.actions; let last = last"
+        class="rounded-md text-white position-relative bg-{{ i.bg }}"
+        [ngClass]="{ 'mb-md': !last }"
+      >
+        <strong class="d-block p-md">{{ i.title }}</strong>
+        <div class="px-md">{{ i.content }}</div>
+        <div class="p-sm text-right">
+          <button (click)="msg.success('Dismiss')" nz-button class="btn-flat text-white text-hover">Dismiss</button>
+          <button (click)="msg.success('View')" nz-button class="btn-flat text-white text-hover">View</button>
+        </div>
+        <span
+          nz-dropdown
+          [nzDropdownMenu]="actionMenu"
+          nzPlacement="bottomRight"
+          class="dd-btn brand-top-right text-white"
+        >
+          <i nz-icon nzType="ellipsis"></i>
+        </span>
+        <nz-dropdown-menu #actionMenu="nzDropdownMenu">
+          <ul nz-menu>
+            <li nz-menu-item (click)="msg.success('Item1')">Item1</li>
+            <li nz-menu-item (click)="msg.success('Item2')">Item2</li>
+            <li nz-menu-divider></li>
+            <li nz-menu-item (click)="msg.success('Item3')">Item3</li>
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="type === 2">
+      <h3 class="setting-drawer__title">Notifications</h3>
+      <div class="setting-drawer__body-item">
+        Enable notifications:
+        <nz-switch
+          [(ngModel)]="data.settings.notification"
+          (ngModelChange)="updateSetting('notification', $event)"
+        ></nz-switch>
+      </div>
+      <div class="setting-drawer__body-item">
+        Enable audit log:
+        <nz-switch
+          [(ngModel)]="data.settings.audit_log"
+          (ngModelChange)="updateSetting('audit_log', $event)"
+        ></nz-switch>
+      </div>
+      <div class="setting-drawer__body-item">
+        Notify on new orders:
+        <nz-switch
+          [(ngModel)]="data.settings.new_order"
+          (ngModelChange)="updateSetting('new_order', $event)"
+        ></nz-switch>
+      </div>
+      <h3 class="setting-drawer__title mt-md">Orders</h3>
+      <div class="setting-drawer__body-item">
+        Enable order tracking:
+        <nz-switch
+          [(ngModel)]="data.settings.tracking_order"
+          (ngModelChange)="updateSetting('tracking_order', $event)"
+        ></nz-switch>
+      </div>
+      <div class="setting-drawer__body-item">
+        Enable orders reports:
+        <nz-switch
+          [(ngModel)]="data.settings.reports_order"
+          (ngModelChange)="updateSetting('reports_order', $event)"
+        ></nz-switch>
+      </div>
+      <h3 class="setting-drawer__title mt-md">Customers</h3>
+      <div class="setting-drawer__body-item">
+        Enable customer singup:
+        <nz-switch
+          [(ngModel)]="data.settings.new_customer"
+          (ngModelChange)="updateSetting('new_customer', $event)"
+        ></nz-switch>
+      </div>
+      <div class="setting-drawer__body-item">
+        Enable customers reporting:
+        <nz-switch
+          [(ngModel)]="data.settings.reporting_customer"
+          (ngModelChange)="updateSetting('reporting_customer', $event)"
+        ></nz-switch>
+      </div>
+      <h3 class="setting-drawer__title mt-md">Other</h3>
+      <div class="setting-drawer__body-item">
+        Weak Mode:
+        <nz-switch [(ngModel)]="layout.colorWeak" (ngModelChange)="setLayout('colorWeak', $event)"></nz-switch>
+      </div>
+    </ng-container>
+  </div>
+</nz-spin>

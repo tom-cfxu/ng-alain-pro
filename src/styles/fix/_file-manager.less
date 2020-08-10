@@ -1,0 +1,139 @@
+@file-item-name-color: #4e5155;
+@file-item-selected-border-color: @primary-color;
+@file-item-selected-bg: @blue-1;
+
+app-file-manager file-manager {
+  display: block;
+  padding: 24px;
+  background: #fff;
+}
+
+.file {
+  &-manager {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    &__header {
+      display: flex;
+      align-items: center;
+      margin-top: 16px;
+      padding: 0 32px 4px 12px;
+      font-weight: 700;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+      &-name {
+        flex: 1;
+      }
+      &-pixel {
+        width: 150px;
+      }
+      &-time {
+        width: 130px;
+      }
+    }
+    &__small {
+      .file-item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        margin: 0 0 2px;
+        padding: 4px 32px 4px 0;
+        text-align: left;
+        &__icon,
+        &__img {
+          display: block;
+          width: 32px;
+          height: 32px;
+          margin: 0 8px;
+          font-size: 20px;
+          line-height: 32px;
+          text-align: center;
+        }
+        &__name {
+          flex: 1;
+        }
+        &__pixel {
+          position: inherit;
+          width: 150px;
+          > span {
+            background: none;
+          }
+        }
+        &__time {
+          display: block;
+          width: 130px;
+        }
+      }
+    }
+  }
+  &-item {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 auto;
+    flex-shrink: 0;
+    width: 9rem;
+    margin: 0 8px 8px 0;
+    padding: 16px 0 24px;
+    text-align: center;
+    border: 1px solid transparent;
+    cursor: pointer;
+    &:hover {
+      border-color: rgba(0, 0, 0, 0.05);
+      .file-item__actions {
+        display: block;
+      }
+    }
+    &__selected {
+      background-color: @file-item-selected-bg !important;
+      border-color: @file-item-selected-border-color !important;
+      .file-item__actions {
+        display: block;
+      }
+    }
+    &__icon {
+      display: block;
+      margin: 16px 0;
+      font-size: 40px;
+    }
+    &__img {
+      display: block;
+      width: 4rem;
+      height: 4rem;
+      margin: 0 auto 0.75rem;
+      font-size: 2.5rem;
+      line-height: 4rem;
+      background-color: transparent;
+      background-position: center center;
+      background-size: cover;
+    }
+    &__name {
+      height: 28px;
+      padding: 0 8px;
+      overflow: hidden;
+      color: @file-item-name-color;
+      line-height: 28px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    &__pixel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      > span {
+        display: block;
+        width: 100%;
+        padding: 2px 0;
+        background: rgba(0, 0, 0, 0.01);
+      }
+    }
+    &__time {
+      display: none;
+    }
+    &__actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      display: none;
+    }
+  }
+}

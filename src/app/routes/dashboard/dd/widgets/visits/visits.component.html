@@ -1,0 +1,18 @@
+<g2-card
+  [title]="'app.analysis.payments' | translate"
+  total="6,560"
+  contentHeight="46px"
+  [action]="action3"
+  [footer]="footer3"
+>
+  <ng-template #action3>
+    <i nz-tooltip [nzTooltipTitle]="'app.analysis.introduce' | translate" nz-icon nzType="info-circle"></i>
+  </ng-template>
+  <g2-mini-bar *ngIf="data" height="46" [data]="data"></g2-mini-bar>
+  <ng-template #footer3>
+    <p class="text-truncate mb0">
+      {{ 'app.analysis.conversion-rate' | translate }}
+      <span class="ml-sm">60%</span>
+    </p>
+  </ng-template>
+</g2-card>

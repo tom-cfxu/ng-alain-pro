@@ -1,0 +1,58 @@
+@pro-passport-prefix: ~'.pro-passport';
+
+@{pro-passport-prefix} {
+  display: flex;
+  flex-basis: 100%;
+  align-items: stretch;
+  justify-content: stretch;
+  min-height: 100vh;
+  overflow: hidden;
+  &__langs {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 9999;
+    .alain-pro__header-item {
+      height: auto;
+      padding: 0;
+    }
+    .anticon {
+      color: #fff !important;
+    }
+  }
+  &__bg {
+    padding: 0 24px;
+    background-color: transparent;
+    background-position: center center;
+    background-size: cover;
+    &-overlay {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: #000;
+      opacity: 0.4;
+    }
+  }
+  &__form {
+    padding: 32px;
+    &-logo {
+      height: 32px;
+      text-align: center;
+      img {
+        max-height: 100%;
+      }
+    }
+    &-title {
+      margin: 16px 0;
+      color: @grey-6;
+      text-align: center;
+    }
+  }
+  @media (max-width: @screen-md-max) {
+    &__form {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+<g2-card
+  [title]="params.title"
+  total="{{ params.total | _currency }}"
+  contentHeight="44px"
+  [action]="action1"
+  [footer]="footer1"
+>
+  <ng-template #action1>
+    <i nz-tooltip [nzTooltipTitle]="'app.analysis.introduce' | translate" nz-icon nzType="info-circle"></i>
+  </ng-template>
+  <trend flag="up" style="display:block; margin-top:2px;">
+    {{ 'app.analysis.week' | translate }}
+    <span class="pl-sm">{{ params.week }}%</span>
+  </trend>
+  <trend flag="down">
+    {{ 'app.analysis.day' | translate }}
+    <span class="pl-sm">{{ params.day }}%</span>
+  </trend>
+  <ng-template #footer1>
+    <p class="text-truncate mb0">
+      {{ 'app.analysis.day-sales' | translate }}
+      <span class="ml-sm">{{ params.daySales | _currency }}</span>
+    </p>
+  </ng-template>
+</g2-card>

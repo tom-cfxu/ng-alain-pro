@@ -1,0 +1,75 @@
+<pro-langs class="pro-passport__langs"></pro-langs>
+<div class="pro-passport__bg width-100" style="background-image: url('./assets/tmp/img-big/bg-2.jpeg')">
+  <div class="pro-passport__bg-overlay"></div>
+  <div class="pro-passport__form">
+    <div class="pro-passport__form-logo"><img src="./assets/logo-color.svg" /></div>
+    <h3 class="pro-passport__form-title">{{ 'app.register.register' | translate }}</h3>
+    <form nz-form #f="ngForm" nzLayout="vertical" [formGroup]="form" (ngSubmit)="submit()" role="form" se-container>
+      <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
+      <se
+        [label]="'validation.phone-number' | translate"
+        required
+        [error]="'validation.phone-number.wrong-format' | translate"
+      >
+        <nz-input-group nzSize="large" [nzAddOnBefore]="addOnBeforeTemplate">
+          <ng-template #addOnBeforeTemplate>
+            <nz-select formControlName="mobilePrefix" style="width: 80px;">
+              <nz-option [nzLabel]="'+86'" [nzValue]="'+86'"></nz-option>
+              <nz-option [nzLabel]="'+87'" [nzValue]="'+87'"></nz-option>
+            </nz-select>
+          </ng-template>
+          <input formControlName="mobile" nz-input type="tel" placeholder="Phone number" />
+        </nz-input-group>
+      </se>
+      <se
+        [label]="'validation.verification-code' | translate"
+        required
+        [error]="'validation.verification-code.required' | translate"
+      >
+        <nz-row [nzGutter]="8">
+          <nz-col [nzSpan]="12">
+            <nz-input-group nzSize="large" nzAddonBeforeIcon="anticon anticon-mail">
+              <input nz-input formControlName="captcha" type="tel" placeholder="Captcha" />
+            </nz-input-group>
+            <nz-form-explain *ngIf="captcha.dirty && captcha.errors">
+              {{ 'validation.verification-code.required' | translate }}
+            </nz-form-explain>
+          </nz-col>
+          <nz-col [nzSpan]="12">
+            <button
+              type="button"
+              nz-button
+              nzSize="large"
+              (click)="getCaptcha()"
+              [disabled]="count"
+              nzBlock
+              [nzLoading]="http.loading"
+            >
+              {{ count ? count + 's' : ('app.register.get-verification-code' | translate) }}
+            </button>
+          </nz-col>
+        </nz-row>
+      </se>
+      <se [label]="'validation.password' | translate" required [error]="'validation.password.required' | translate">
+        <input nz-input type="password" nzSize="large" formControlName="password" placeholder="Password" />
+      </se>
+      <se>
+        <div class="d-flex align-items-center justify-content-between">
+          <button
+            nz-button
+            nzType="primary"
+            nzSize="large"
+            type="submit"
+            [disabled]="f.invalid"
+            [nzLoading]="http.loading"
+          >
+            {{ 'app.register.register' | translate }}
+          </button>
+          <a routerLink="/passport/login">
+            {{ 'app.register.sign-in' | translate }}
+          </a>
+        </div>
+      </se>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<page-header-wrapper>
+  <nz-card>
+    <sf
+      #sf
+      mode="search"
+      [schema]="searchSchema"
+      [formData]="params"
+      (formSubmit)="st.reset($event)"
+      (formReset)="st.reset(params)"
+    ></sf>
+    <div class="py-md" *ngIf="st.total > 0">
+      <button nz-popconfirm nzPopconfirmTitle="确定吗？" (nzOnConfirm)="del()" nz-button nzType="danger">
+        清空搜索结果
+      </button>
+    </div>
+    <st #st [data]="url" [columns]="columns" [req]="{ params: params }" [expand]="expand" expandRowByClick>
+      <ng-template #expand let-i let-index="index" let-column="column">
+        <sv-container labelWidth="100" col="1">
+          <sv label="ID">{{ i.id }}</sv>
+          <sv label="Level">{{ i.level }}</sv>
+          <sv label="Path">{{ i.path }}</sv>
+          <sv label="Title">{{ i.title }}</sv>
+          <sv label="Created">{{ i.created | _date }}</sv>
+          <sv label="Data">
+            <pre [innerHTML]="i.data | html"></pre>
+          </sv>
+        </sv-container>
+      </ng-template>
+    </st>
+  </nz-card>
+</page-header-wrapper>

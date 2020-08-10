@@ -1,0 +1,40 @@
+<ng-template #render let-list>
+  <nz-card *ngFor="let i of list" [nzTitle]="titleTpl" [nzBordered]="false">
+    <ng-template #titleTpl>
+      <div class="text-center width-100">{{ i.title }}</div>
+    </ng-template>
+    <nz-collapse [nzBordered]="false" nzAccordion class="brand-collapse-arrow-reverse">
+      <nz-collapse-panel *ngFor="let v of i.children" [nzHeader]="panelTitle" [(nzActive)]="v.active">
+        <ng-template #panelTitle>
+          <div [ngClass]="{ 'text-primary': v.active }">{{ v.q }}</div>
+        </ng-template>
+        <div [innerHTML]="v.a | html"></div>
+      </nz-collapse-panel>
+    </nz-collapse>
+  </nz-card>
+</ng-template>
+<page-header-wrapper [loading]="!primaryList">
+  <ng-container *ngIf="primaryList">
+    <div nz-row nzGutter="32">
+      <div *ngFor="let i of primaryList" nz-col nzMd="8" (click)="change(i)">
+        <nz-card
+          class="border-1 brand-border-width-2 rounded-md point text-center"
+          [ngClass]="{ 'border-primary': i.selected }"
+        >
+          <div class="py-lg">
+            <i class="icon-md" nz-icon [nzType]="i.icon" nzTheme="twotone"></i>
+            <div class="text-md font-weight-bold pt-md">{{ i.title }}</div>
+          </div>
+        </nz-card>
+      </div>
+    </div>
+    <div nz-row nzGutter="32" class="mt-md">
+      <div nz-col nzMd="12">
+        <ng-template [ngTemplateOutlet]="render" [ngTemplateOutletContext]="{ $implicit: leftList }"></ng-template>
+      </div>
+      <div nz-col nzMd="12">
+        <ng-template [ngTemplateOutlet]="render" [ngTemplateOutletContext]="{ $implicit: rightList }"></ng-template>
+      </div>
+    </div>
+  </ng-container>
+</page-header-wrapper>

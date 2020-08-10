@@ -1,0 +1,91 @@
+<page-header-wrapper>
+  <nz-card>
+    <sf
+      #sf
+      layout="horizontal"
+      [schema]="searchSchema"
+      [formData]="params"
+      [button]="btn"
+      class="sf__no-error"
+      (formSubmit)="load($event)"
+      (formReset)="load()"
+    ></sf>
+  </nz-card>
+  <nz-card>
+    <nz-card-tab>
+      <nz-tabset nzSize="large" [(nzSelectedIndex)]="statusIndex" (nzSelectChange)="changeTab()">
+        <nz-tab nzTitle="全部"></nz-tab>
+        <nz-tab nzTitle="未付款"></nz-tab>
+        <nz-tab nzTitle="待发货"></nz-tab>
+        <nz-tab nzTitle="已发货"></nz-tab>
+        <nz-tab nzTitle="完成"></nz-tab>
+        <nz-tab nzTitle="取消"></nz-tab>
+      </nz-tabset>
+    </nz-card-tab>
+    <nz-table
+      #nzTable
+      [nzData]="list"
+      (nzPageIndexChange)="load()"
+      [nzTotal]="total"
+      [(nzPageIndex)]="params.pi"
+      [(nzPageSize)]="params.ps"
+      nzHideOnSinglePage
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+    >
+      <thead>
+        <tr>
+          <th>单号</th>
+          <th>产品</th>
+          <th>时间</th>
+          <th>金额</th>
+          <th>状态</th>
+          <th>物流</th>
+          <th nzWidth="50px"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of nzTable.data">
+          <td>
+            <a (click)="view(i)">{{ i.id }}</a>
+          </td>
+          <td>
+            <ng-container *ngFor="let g of i.wares; let first = first">
+              <a
+                [ngClass]="{ 'pl-sm': !first }"
+                nz-tooltip="{{ g.title }}，数量：{{ g.num }}，价格：{{ g.price | _currency }}"
+                routerLink="/ec/ware/{{ g.ware_id }}"
+              >
+                <img src="{{ g.mp }}" height="32" width="32" />
+              </a>
+            </ng-container>
+          </td>
+          <td>
+            <span class="text-grey">下单时间：</span>{{ i.created | _date: 'YY-MM-DD HH:mm' }}
+            <div><span class="text-grey">付款时间：</span>{{ i.pay_time | _date: 'YY-MM-DD HH:mm' }}</div>
+          </td>
+          <td>
+            <span class="text-grey">支付金额：</span>{{ i.payment | _currency }}
+            <div><span class="text-grey">优惠金额：</span>{{ i.discount_fee | _currency }}</div>
+          </td>
+          <td>
+            {{ i.status_str }}
+            <div>{{ i.buyer_nick }}</div>
+          </td>
+          <td>
+            <div>{{ i.logistics_name }}</div>
+            {{ i.logistics_no }}
+          </td>
+          <td>
+            <a *ngIf="i.memo" (click)="memo(i)" [nz-tooltip]="i.memo">
+              <i nz-icon nzType="flag"></i>
+            </a>
+            <a *ngIf="!i.memo" (click)="memo(i)">
+              <i nz-icon nzType="flag"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+</page-header-wrapper>

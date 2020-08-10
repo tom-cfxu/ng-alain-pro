@@ -1,0 +1,55 @@
+<page-header-wrapper [loading]="!list" [action]="action">
+  <ng-template #action>
+    <nz-input-group [nzSuffix]="suffixIconSearch">
+      <input type="text" nz-input placeholder="title..." [(ngModel)]="s.q" delay (delayChange)="load(1)" />
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <i nz-icon nzType="search"></i>
+    </ng-template>
+  </ng-template>
+  <ng-container *ngIf="list">
+    <div class="no-data" *ngIf="total === 0">No course</div>
+    <div nz-row nzGutter="32">
+      <div *ngFor="let i of list" nz-col nzSm="12" nzXl="8">
+        <nz-card nzHoverable [nzCover]="coverTpl" class="course-card">
+          <h2 class="text-truncate">{{ i.title }}</h2>
+          <p class="text-grey overflow-hidden" style="max-height: 40px">{{ i.remark }}</p>
+          <div class="d-flex">
+            <nz-rate
+              nz-tooltip="{{ i.star }} star"
+              nzPlacement="topLeft"
+              class="flex-1 course__star"
+              [ngModel]="i.star"
+              nzAllowHalf
+              nzDisabled
+            ></nz-rate>
+            <div>
+              <i class="text-error" nz-icon nzType="clock-circle"></i>
+              {{ i.hour }}h
+            </div>
+          </div>
+        </nz-card>
+        <ng-template #coverTpl>
+          <a class="course__img" [ngStyle]="{ 'background-image': 'url(' + i.mp + ')' }">
+            <div class="d-flex justify-content-between align-items-end p-md">
+              <div>
+                <nz-tag class="text-xs" *ngFor="let t of i.tags" nzColor="#e84c64">{{ t }}</nz-tag>
+              </div>
+              <nz-tag *ngIf="i.price > 0" class="text-xs" nzColor="#181c21">{{ i.price | _currency }}</nz-tag>
+              <nz-tag *ngIf="i.price <= 0" class="text-xs" nzColor="#87d068">Free</nz-tag>
+            </div>
+          </a>
+        </ng-template>
+      </div>
+    </div>
+    <div *ngIf="total > s.ps" class="text-center mt-md pt-md border-top-1">
+      <nz-pagination
+        [(nzPageIndex)]="s.pi"
+        (nzPageIndexChange)="load($event)"
+        [nzPageSize]="s.ps"
+        [nzTotal]="total"
+        nzHideOnSinglePage
+      ></nz-pagination>
+    </div>
+  </ng-container>
+</page-header-wrapper>

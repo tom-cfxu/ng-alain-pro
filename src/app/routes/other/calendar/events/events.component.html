@@ -1,0 +1,28 @@
+<page-header-wrapper>
+  <div nz-row nzGutter="16">
+    <div nz-col nzLg="6">
+      <nz-card nzTitle="Events">
+        <div #external>
+          <div *ngFor="let p of events; let last = last" class="fc-unthemed fc-antd">
+            <div
+              *ngFor="let i of p.children"
+              class="fc-event fc-event-external fc-start mb-sm point"
+              [ngClass]="i.className"
+            >
+              <div class="fc-title">
+                <div class="fc-content">{{ i.title }}</div>
+              </div>
+            </div>
+            <nz-divider nzDashed></nz-divider>
+          </div>
+        </div>
+        <label nz-checkbox [(ngModel)]="removeAfterDrop" name="removeAfterDrop">Remove after drop</label>
+      </nz-card>
+    </div>
+    <div nz-col nzLg="18">
+      <nz-card nzTitle="My Events">
+        <div #calendar class="fc-antd"></div>
+      </nz-card>
+    </div>
+  </div>
+</page-header-wrapper>

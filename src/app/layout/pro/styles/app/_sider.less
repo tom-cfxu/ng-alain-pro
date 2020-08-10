@@ -1,0 +1,123 @@
+@sider-prefix: ~'@{alain-pro-prefix}__sider';
+
+@{sider-prefix} {
+  position: relative;
+  z-index: 10;
+  display: block;
+  min-height: 100vh;
+  overflow: hidden;
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  &-logo {
+    position: relative;
+    display: block;
+    height: @alain-pro-header-height;
+    padding-left: (@menu-collapsed-width - 32px) / 2;
+    overflow: hidden;
+    line-height: @alain-pro-header-height;
+    background: #002140;
+    transition: all 0.3s;
+    img {
+      display: inline-block;
+      height: 32px;
+      vertical-align: middle;
+    }
+    h1 {
+      display: inline-block;
+      margin: 0 0 0 12px;
+      color: white;
+      font-weight: 600;
+      font-size: @alain-pro-logo-font-size;
+      font-family: @alain-pro-logo-font-family;
+      vertical-align: middle;
+      transition: all 0.3s;
+    }
+  }
+  &-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    @{alain-pro-prefix}__side-nav-wrap {
+      height: ~'calc(100vh - @{alain-pro-header-height})';
+      padding-bottom: 24px;
+      overflow-y: scroll;
+    }
+  }
+}
+
+// 小屏幕 drawer 配置信息
+@{alain-pro-prefix}__drawer {
+  .@{ant-prefix}-drawer {
+    &-wrapper-body {
+      height: 100%;
+      overflow: auto;
+    }
+    &-body {
+      height: 100vh;
+      padding: 0;
+      overflow-x: hidden;
+    }
+  }
+}
+
+// 当缩进时隐藏站点名称
+@{aside-collapsed-prefix} {
+  @{sider-prefix}-logo {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+    h1 {
+      display: none;
+    }
+  }
+}
+
+@{alain-pro-prefix}__light {
+  @{sider-prefix} {
+    background-color: @alain-pro-light-color;
+    box-shadow: @alain-pro-light-slider-shadow;
+    &-logo {
+      background: @alain-pro-light-color;
+      box-shadow: 1px 1px 0 0 @border-color-split;
+      h1 {
+        color: @primary-color;
+      }
+    }
+    .@{ant-prefix}-menu-light {
+      border-right-color: transparent;
+    }
+  }
+}
+
+.alain-pro-sider-fixed-scroll-mixin(@mode) when(@mode='show') {
+  .scrollbar-mixin(~'@{ider-prefix}-fixed @{alain-pro-prefix}__side-nav-wrap');
+}
+
+.alain-pro-sider-fixed-scroll-mixin(@mode) when(@mode='hide') {
+  @{sider-prefix}-fixed @{alain-pro-prefix}__side-nav-wrap {
+    -webkit-overflow-scrolling: touch;
+    // IE
+    -ms-scroll-chaining: chained;
+    -ms-content-zooming: zoom;
+    -ms-scroll-rails: none;
+    -ms-content-zoom-limit-min: 100%;
+    -ms-content-zoom-limit-max: 500%;
+    -ms-scroll-snap-type: proximity;
+    -ms-scroll-snap-points-x: snaplist(100%, 200%, 300%, 400%, 500%);
+    -ms-overflow-style: none;
+    // Firefox
+    scrollbar-width: none;
+    // Chrome
+    &::-webkit-scrollbar {
+      width: @alain-pro-sider-scrollbar-height;
+      height: @alain-pro-sider-scrollbar-width;
+    }
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 @alain-pro-sider-scrollbar-width @alain-pro-sider-scrollbar-track-color;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: @alain-pro-sider-scrollbar-thumb-color;
+    }
+  }
+}
+
+.alain-pro-sider-fixed-scroll-mixin(@alain-pro-sider-fixed-scroll-mode);

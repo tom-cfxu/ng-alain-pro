@@ -1,0 +1,36 @@
+@task-prefix: ~'.task';
+
+@{task-prefix} {
+  &__container {
+    border-bottom: 1px solid #e8e8e8;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  &__title {
+    margin-bottom: 16px;
+    color: #a3a4a6;
+    font-weight: normal;
+    font-size: 12px;
+  }
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-top: 1px solid rgba(24, 28, 33, 0.06);
+    &:first-child {
+      border-top: none;
+    }
+    &-handle {
+      margin-right: 16px;
+      color: @grey-6;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    &-done {
+      color: #a3a4a6;
+      text-decoration: line-through;
+    }
+  }
+}

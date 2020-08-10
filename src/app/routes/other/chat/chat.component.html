@@ -1,0 +1,118 @@
+<ng-template #sidebox>
+  <div class="m-md pb-md border-bottom-1">
+    <input nz-input [(ngModel)]="q" nzSize="large" placeholder="Search..." delay (delayChange)="findUser()" />
+  </div>
+  <div class="chat__scroll-container" [scrollbar]="{ delay: 50 }" [disabled]="brand.isMobile">
+    <span
+      *ngFor="let i of i.users"
+      class="chat__contact"
+      (click)="choUser(i)"
+      [ngClass]="{
+        'chat__contact-active': i.active,
+        'chat__contact-offline': !i.online
+      }"
+    >
+      <img class="chat__user-avatar" src="{{ i.mp }}" />
+      <div class="flex-1 ml-md">
+        <div class="text-truncate">{{ i.name }}</div>
+        <div>
+          <nz-badge *ngIf="i.online" nzStatus="success" nzText="Online"></nz-badge>
+          <nz-badge *ngIf="!i.online" nzStatus="default" nzText="Offline"></nz-badge>
+        </div>
+      </div>
+      <nz-badge *ngIf="i.unread > 0" [nzCount]="i.unread" [nzStyle]="{ backgroundColor: '#52c41a' }"></nz-badge>
+    </span>
+  </div>
+</ng-template>
+<page-grid [loading]="!i">
+  <div *ngIf="i" class="chat__container" style="height: 500px;">
+    <div class="chat__sidebox" *ngIf="!brand.isMobile">
+      <ng-template [ngTemplateOutlet]="sidebox"></ng-template>
+    </div>
+    <nz-drawer
+      *ngIf="brand.isMobile"
+      [nzWidth]="250"
+      nzWrapClassName="alain-pro__drawer"
+      [(nzVisible)]="userVisible"
+      [nzClosable]="false"
+      [nzMaskClosable]="true"
+      nzPlacement="left"
+      (nzOnClose)="userVisible = false"
+    >
+      <ng-template [ngTemplateOutlet]="sidebox"></ng-template>
+    </nz-drawer>
+    <div class="d-flex flex-column flex-grow-1">
+      <div class="px-lg py-md border-bottom-1">
+        <div class="d-flex align-items-center">
+          <a (click)="userVisible = true" class="hidden-pc">
+            <i nz-icon nzType="ellipsis" class="rotate-90 text-grey-dark mr-md"></i>
+          </a>
+          <div class="position-relative">
+            <div class="position-absolute" style="top: -8px; left: 0;">
+              <nz-badge *ngIf="user.online" nzStatus="success"></nz-badge>
+              <nz-badge *ngIf="!user.online" nzStatus="default"></nz-badge>
+            </div>
+            <img class="chat__user-avatar" src="{{ user.mp }}" />
+          </div>
+          <div class="flex-1 pl-md">
+            <strong>{{ user.name }}</strong>
+            <em class="d-block text-grey text-xs">Typing...</em>
+          </div>
+          <div>
+            <button (click)="msg.success('phone')" nz-button nzType="primary" nzShape="circle">
+              <i nz-icon nzType="phone"></i>
+            </button>
+            <button (click)="msg.success('video')" nz-button nzType="danger" nzShape="circle">
+              <i nz-icon nzType="video-camera"></i>
+            </button>
+            <button nz-button class="ml-sm" nzShape="circle" nz-dropdown [nzDropdownMenu]="userMenu">
+              <i nz-icon nzType="ellipsis"></i>
+            </button>
+            <nz-dropdown-menu #userMenu="nzDropdownMenu">
+              <ul nz-menu>
+                <li nz-menu-item>Item 1</li>
+                <li nz-menu-item>Item 2</li>
+              </ul>
+            </nz-dropdown-menu>
+          </div>
+        </div>
+      </div>
+      <div class="flex-grow-1 position-relative">
+        <div class="chat__scroll-container chat__message-container" scrollbar #messageScrollbar="scrollbarComp">
+          <div *ngFor="let m of messages" class="chat__message chat__message-{{ m.dir }}">
+            <ng-container [ngSwitch]="m.type">
+              <div *ngSwitchCase="'only-text'" class="chat__message-text" [innerHTML]="m.msg"></div>
+              <ng-container *ngSwitchDefault>
+                <div class="chat__message-avatar">
+                  <img class="chat__user-avatar" src="{{ user.mp }}" />
+                  <div class="chat__message-time">11:04 pm</div>
+                </div>
+                <div class="chat__message-msg">
+                  <strong class="chat__message-msg--name">{{ m.dir === 'right' ? 'You' : user.name }}</strong>
+                  <div class="chat__message-msg--text" *ngIf="m.type === 'text'">{{ m.msg }}</div>
+                  <div class="chat__message-msg--image" *ngIf="m.type === 'image'">
+                    <img height="40" src="{{ m.msg }}" />
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="border-top-1 p-lg">
+        <nz-input-group nzSearch nzSize="large" [nzSuffix]="suffixButton">
+          <input
+            type="text"
+            [(ngModel)]="text"
+            (keydown.enter)="enterSend($event)"
+            nz-input
+            placeholder="Type your message"
+          />
+        </nz-input-group>
+        <ng-template #suffixButton>
+          <button nz-button nzType="primary" nzSize="large" nzSearch (click)="send()">Send</button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</page-grid>

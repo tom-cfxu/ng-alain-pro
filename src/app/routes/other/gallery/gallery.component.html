@@ -1,0 +1,28 @@
+<page-grid [loading]="!images">
+  <ng-container *ngIf="images">
+    <nz-tabset (nzSelectedIndexChange)="changeType($event)">
+      <nz-tab *ngFor="let t of types" [nzTitle]="t"></nz-tab>
+    </nz-tabset>
+
+    <ngx-image-gallery #gallery [images]="images" [conf]="conf"> </ngx-image-gallery>
+
+    <div *ngIf="images.length === 0" class="no-data">No Data</div>
+    <div *ngIf="images.length > 0" nz-row nzGutter="8" masonry [disabled]="masonryDisabled">
+      <div class="masonry__sizer ant-col-md-12 ant-col-xl-6 position-absolute"></div>
+      <div
+        *ngFor="let i of images; let idx = index"
+        (click)="gallery.open(idx)"
+        class="masonry__thm mb-sm"
+        nz-col
+        nzMd="12"
+        nzXl="6"
+      >
+        <a class="img-thm img-thm__zoom-in">
+          <i class="img-thm__mask"></i>
+          <i class="img-thm__icon" nz-icon nzType="search"></i>
+          <img class="img-thm__img" src="{{ i.url }}" (load)="imgLoaded()" style="min-height: 150px" />
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</page-grid>

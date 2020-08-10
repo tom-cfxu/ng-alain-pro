@@ -1,0 +1,110 @@
+<page-header-wrapper>
+  <nz-card>
+    <div class="d-flex justify-content-between align-items-center mb-md">
+      <range-picker
+        class="brand-range-picker__date"
+        [(ngModel)]="params.start"
+        [(ngModelEnd)]="params.end"
+        (ngModelEndChange)="st.reload()"
+      ></range-picker>
+      <nz-input-group nzSearch [nzSuffix]="suffixIconButton" class="max-width-sm">
+        <input type="text" [(ngModel)]="params.q" delay (delayChange)="st.reload()" nz-input placeholder="CLIENT..." />
+      </nz-input-group>
+      <ng-template #suffixIconButton>
+        <button nz-button nzType="primary" nzSearch><i nz-icon nzType="search"></i></button>
+      </ng-template>
+    </div>
+    <st #st [data]="url" [columns]="columns" [req]="{ params: params }" [expand]="expand" expandRowByClick>
+      <ng-template #expand let-i let-index="index" let-column="column">
+        <div class="border-1 rounded-sm p-lg bg-white">
+          <h3>Invoice</h3>
+          <div nz-row class="mb-lg pb-md">
+            <div nz-col nzSpan="6">
+              <span class="text-grey">Date:</span>
+              {{ i.date | _date: 'DD MMM, YYYY' }}
+            </div>
+            <div nz-col nzSpan="6">
+              <span class="text-grey">Merchant:</span>
+              {{ i.client }}
+            </div>
+            <div nz-col nzSpan="12">
+              <span class="text-grey">Authorization code:</span>
+              {{ i.auth_code }}
+            </div>
+          </div>
+          <div nz-row>
+            <div nz-col nzSm="12">
+              <h4 class="text-sm text-uppercase">Billing address:</h4>
+              <address>
+                <span class="d-block font-weight-bold text-md">Atlassian</span>
+                {{ i.address }}
+              </address>
+            </div>
+            <div nz-col nzSm="12">
+              <h4 class="text-sm text-uppercase">Client info:</h4>
+              <ul class="list-unstyled mb-0">
+                <li class="mb-sm">
+                  <span class="text-grey">First name:</span>
+                  <span class="ml-xs">{{ i.first_name }}</span>
+                </li>
+                <li class="mb-sm">
+                  <span class="text-grey">Last name:</span>
+                  <span class="ml-xs">{{ i.last_name }}</span>
+                </li>
+                <li class="mb-sm">
+                  <span class="text-grey">Country:</span>
+                  <span class="ml-xs">{{ i.country }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div nz-row nzType="flex" nzJustify="end" class="mb-lg">
+            <div nz-col nzSm="12" class="mt-lg pt-lg border-top-1">
+              <h4 class="text-sm text-uppercase">Transaction details:</h4>
+              <ul class="list-unstyled mb-0">
+                <li class="d-flex justify-content-between align-items-center mb-sm">
+                  <span class="text-grey">Transaction amount</span>
+                  <span class="ml-xs">{{ i.amount | _currency }}</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center mb-sm">
+                  <span class="text-grey">Fee</span>
+                  <span class="ml-xs">{{ i.fee | _currency }}</span>
+                </li>
+                <li class="d-flex justify-content-between align-items-center mb-sm">
+                  <span class="text-grey">Total amount</span>
+                  <span class="ml-xs text-primary">{{ i.amount + i.fee | _currency }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <button
+              (click)="msg.success('download-' + i.id)"
+              nz-button
+              nzType="primary"
+              nzSize="small"
+              class="btn-flat text-grey-dark text-hover"
+            >
+              <i nz-icon nzType="download"></i>Download invoice
+            </button>
+            <nz-divider nzType="vertical"></nz-divider>
+            <button
+              (click)="msg.success('print-' + i.id)"
+              nz-button
+              nzType="primary"
+              nzSize="small"
+              class="btn-flat text-grey-dark text-hover"
+            >
+              <i nz-icon nzType="printer"></i>Print details
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template st-row="status" let-i>
+        <span class="text-success" *ngIf="i.status === 'Completed'">Completed</span>
+        <span class="text-warning" *ngIf="i.status === 'Pending'">Pending</span>
+        <span class="text-error" *ngIf="i.status === 'Rejected'">Rejected</span>
+      </ng-template>
+    </st>
+  </nz-card>
+</page-header-wrapper>

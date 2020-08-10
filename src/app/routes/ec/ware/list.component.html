@@ -1,0 +1,26 @@
+<page-header-wrapper [action]="action">
+  <ng-template #action>
+    <button routerLink="/ec/ware/edit/0" nz-button nzType="primary">Add new ware</button>
+  </ng-template>
+  <nz-card>
+    <sf
+      #sf
+      layout="horizontal"
+      [schema]="searchSchema"
+      [formData]="params"
+      [button]="btn"
+      class="sf__no-error"
+      (formSubmit)="st.reset($event)"
+      (formReset)="st.reset(params)"
+    ></sf>
+  </nz-card>
+  <nz-card>
+    <st #st [data]="url" [columns]="columns" [req]="{ params: params }">
+      <ng-template st-row="name" let-i>
+        <a routerLink="/ec/ware/{{ i.id }}">
+          <img src="{{ i.mp }}" class="pr-sm" style="height: 32px" />{{ i.name }}
+        </a>
+      </ng-template>
+    </st>
+  </nz-card>
+</page-header-wrapper>

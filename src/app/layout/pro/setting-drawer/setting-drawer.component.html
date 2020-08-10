@@ -1,0 +1,131 @@
+<nz-drawer [(nzVisible)]="collapse" [nzWidth]="300" (nzOnClose)="toggle()">
+  <div class="setting-drawer__content">
+    <div class="setting-drawer__body">
+      <h3 class="setting-drawer__title">{{ 'app.setting.pagestyle' | translate }}</h3>
+      <div class="setting-drawer__blockChecbox">
+        <div
+          *ngFor="let t of themes"
+          class="setting-drawer__blockChecbox-item"
+          (click)="setLayout('theme', t.key)"
+          nz-tooltip="{{ t.title | translate }}"
+        >
+          <img src="{{ t.img }}" alt="{{ t.key }}" />
+          <div *ngIf="layout.theme === t.key" class="setting-drawer__blockChecbox-selectIcon">
+            <i nz-icon nzType="check"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="setting-drawer__body setting-drawer__theme">
+      <h3 class="setting-drawer__title">{{ 'app.setting.themecolor' | translate }}</h3>
+      <span
+        *ngFor="let c of colors"
+        nz-tooltip
+        (click)="changeColor(c.color)"
+        nz-tooltip
+        [nzTitle]="'app.setting.themecolor.' + c.key | translate"
+        class="setting-drawer__theme-tag"
+        [ngStyle]="{ 'background-color': c.color }"
+      >
+        <i *ngIf="color === c.color" nz-icon nzType="check"></i>
+      </span>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="setting-drawer__body">
+      <h3 class="setting-drawer__title">{{ 'app.setting.navigationmode' | translate }}</h3>
+      <div class="setting-drawer__blockChecbox">
+        <div
+          *ngFor="let t of menuModes"
+          class="setting-drawer__blockChecbox-item"
+          (click)="setLayout('menu', t.key)"
+          nz-tooltip="{{ t.title | translate }}"
+        >
+          <img src="{{ t.img }}" alt="{{ t.key }}" />
+          <div *ngIf="layout.menu === t.key" class="setting-drawer__blockChecbox-selectIcon">
+            <i nz-icon nzType="check"></i>
+          </div>
+        </div>
+      </div>
+      <div class="setting-drawer__body-item">
+        {{ 'app.setting.content-width' | translate }}
+        <nz-select
+          [(ngModel)]="layout.contentWidth"
+          (ngModelChange)="setLayout('contentWidth', layout.contentWidth)"
+          nzSize="small"
+        >
+          <nz-option
+            *ngFor="let i of contentWidths"
+            [nzLabel]="i.title | translate"
+            [nzValue]="i.key"
+            [nzDisabled]="i.disabled"
+          ></nz-option>
+        </nz-select>
+      </div>
+      <div class="setting-drawer__body-item">
+        {{ 'app.setting.fixedheader' | translate }}
+        <nz-switch
+          nzSize="small"
+          [(ngModel)]="layout.fixedHeader"
+          (ngModelChange)="setLayout('fixedHeader', layout.fixedHeader)"
+        ></nz-switch>
+      </div>
+      <div
+        class="setting-drawer__body-item"
+        nz-tooltip="{{ !brand.fixedHeader ? ('app.setting.hideheader.hint' | translate) : '' }}"
+        nzPlacement="left"
+      >
+        <span [style.opacity]="!brand.fixedHeader ? 0.5 : 1">{{ 'app.setting.hideheader' | translate }}</span>
+        <nz-switch
+          [nzDisabled]="!brand.fixedHeader"
+          nzSize="small"
+          [(ngModel)]="layout.autoHideHeader"
+          (ngModelChange)="setLayout('autoHideHeader', layout.autoHideHeader)"
+        ></nz-switch>
+      </div>
+      <div
+        class="setting-drawer__body-item"
+        nz-tooltip="{{ brand.menu === 'top' ? ('app.setting.fixedsidebar.hint' | translate) : '' }}"
+        nzPlacement="left"
+      >
+        <span [style.opacity]="brand.menu === 'top' ? 0.5 : 1">{{ 'app.setting.fixedsidebar' | translate }}</span>
+        <nz-switch
+          [nzDisabled]="brand.menu === 'top'"
+          nzSize="small"
+          [(ngModel)]="layout.fixSiderbar"
+          (ngModelChange)="setLayout('fixSiderbar', layout.fixSiderbar)"
+        ></nz-switch>
+      </div>
+      <div
+        class="setting-drawer__body-item"
+        nz-tooltip="{{ brand.menu === 'top' ? '' : ('app.setting.onlyicon.hint' | translate) }}"
+        nzPlacement="left"
+      >
+        <span [style.opacity]="brand.menu !== 'top' ? 0.5 : 1">{{ 'app.setting.onlyicon' | translate }}</span>
+        <nz-switch
+          [nzDisabled]="brand.menu !== 'top'"
+          nzSize="small"
+          [(ngModel)]="layout.onlyIcon"
+          (ngModelChange)="setLayout('onlyIcon', layout.onlyIcon)"
+        ></nz-switch>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="setting-drawer__body">
+      <h3 class="setting-drawer__title">{{ 'app.setting.othersettings' | translate }}</h3>
+      <div class="setting-drawer__body-item">
+        {{ 'app.setting.weakmode' | translate }}
+        <nz-switch
+          nzSize="small"
+          [(ngModel)]="layout.colorWeak"
+          (ngModelChange)="setLayout('colorWeak', layout.colorWeak)"
+        ></nz-switch>
+      </div>
+    </div>
+    <nz-divider></nz-divider>
+    <button (click)="copy()" type="button" nz-button nzBlock>{{ 'app.setting.copy' | translate }}</button>
+    <nz-alert class="mt-md" nzType="warning" nzMessage="{{ 'app.setting.production.hint' | translate }}"></nz-alert>
+  </div>
+</nz-drawer>
+<div class="setting-drawer__handle" [ngClass]="{ 'setting-drawer__handle-opened': collapse }" (click)="toggle()">
+  <i nz-icon [nzType]="!collapse ? 'setting' : 'close'" class="setting-drawer__handle-icon"></i>
+</div>

@@ -1,0 +1,53 @@
+<page-header-wrapper [loading]="!list" [action]="action">
+  <ng-template #action>
+    <nz-input-group nzSearch [nzSuffix]="suffixButton">
+      <input type="text" nz-input placeholder="input search text" />
+    </nz-input-group>
+    <ng-template #suffixButton>
+      <button nz-button nzType="primary" nzSearch>Search</button>
+    </ng-template>
+  </ng-template>
+  <ng-container *ngIf="list">
+    <nz-table
+      *ngFor="let c of list"
+      [nzData]="c.list"
+      [nzShowPagination]="false"
+      class="ant-table-rep__hide-header-footer d-block bg-white mb-lg"
+    >
+      <thead>
+        <tr>
+          <th class="bg-white">{{ c.title }}</th>
+          <th class="bg-white" nzWidth="100px">Threads</th>
+          <th class="bg-white" nzWidth="100px">Replies</th>
+          <th class="bg-white" nzWidth="250px">Last update</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of c.list">
+          <td>
+            <span class="ant-table-rep__title">{{ c.title }}</span>
+            <a routerLink="/other/forum/thread/{{ i.id }}" class="text-md font-weight-bold">{{ i.title }}</a>
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Threads</span>
+            {{ i.threads }}
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Replies</span>
+            {{ i.replies }}
+          </td>
+          <td>
+            <span class="ant-table-rep__title">Last update</span>
+            <div *ngIf="i.last" class="d-flex">
+              <img src="{{ i.last.mp }}" height="32" class="rounded-circle" />
+              <div class="ml-sm">
+                <a class="d-block text-truncate width-sm" routerLink="/other/forum/1">{{ i.last.title }}</a>
+                <div class="text-grey">{{ i.last.time }}<span class="px-sm">·</span>{{ i.last.user_name }}</div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </ng-container>
+</page-header-wrapper>

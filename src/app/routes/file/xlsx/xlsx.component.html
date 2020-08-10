@@ -1,0 +1,10 @@
+<page-header-wrapper [content]="phContent">
+  <ng-template #phContent>
+    <a href="https://ng-alain.com/components/xlsx" target="_blank">xlsx</a>
+  </ng-template>
+  <nz-card nzTitle="DEMO">
+    <button nz-button (click)="url()" nzType="primary">Via Url</button>
+    <input type="file" (change)="change($event)" multiple="false" class="ml-sm" />
+    <p class="mt-sm">result: {{ data | json }}</p>
+  </nz-card>
+</page-header-wrapper>

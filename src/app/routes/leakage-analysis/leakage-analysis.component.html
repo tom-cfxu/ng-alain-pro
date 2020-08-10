@@ -1,0 +1,57 @@
+<page-grid>
+    <div nz-row [nzGutter]="24">
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="10" style="height: 100vh;">
+            <nz-card [nzTitle]="title0" [nzBordered]="false">
+                <ng-template #title0>
+                    <i nz-icon nzType="table" nzTheme="outline"></i> &nbsp;实时监测数据
+                </ng-template>
+                <st></st>
+            </nz-card>
+        </div>
+        <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="14">
+            <!-- <h3 style="margin-top: 15px;">实时漏损监测图表</h3> -->
+            <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="14">
+                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+                    <nz-card [nzTitle]="title1" [nzBordered]="false">
+                        <ng-template #title1>
+                            <i nz-icon nzType="pie-chart" nzTheme="outline"></i> &nbsp;漏损率 (%)
+                        </ng-template>
+                        <div echarts [options]="LeakageRateOption" class="chart-row1"></div>
+                    </nz-card>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+                    <nz-card [nzTitle]="title2" [nzBordered]="false">
+                        <ng-template #title2>
+                            <i nz-icon nzType="pie-chart" nzTheme="outline"></i> &nbsp;用水漏水量 (%)
+                        </ng-template>
+                        <div echarts [options]="option2" class="chart-row1"></div>
+                    </nz-card>
+                </div>
+            </div>
+            <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="14">
+                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+                    <nz-card [nzTitle]="title3" [nzBordered]="false">
+                        <ng-template #title3>
+                            <i nz-icon nzType="area-chart" nzTheme="outline"></i> &nbsp;用水统计
+                        </ng-template>
+                    </nz-card>
+                </div>
+                <div nz-col nzXs="24" nzSm="24" nzMd="24" nzLg="12">
+                    <nz-card [nzTitle]="title4" [nzBordered]="false">
+                        <ng-template #title4>
+                            <i nz-icon nzType="area-chart" nzTheme="outline"></i> &nbsp;漏损统计
+                        </ng-template>
+                    </nz-card>
+                </div>
+            </div>
+            <div nz-row nzXs="24" nzSm="24" nzMd="24" nzLg="14">
+                <nz-card [nzTitle]="title5" [nzBordered]="false">
+                    <ng-template #title5>
+                        <i nz-icon nzType="line-chart" nzTheme="outline"></i> &nbsp;实时趋势
+                    </ng-template>
+                </nz-card>
+            </div>
+
+        </div>
+    </div>
+</page-grid>

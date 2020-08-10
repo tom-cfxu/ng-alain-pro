@@ -1,0 +1,270 @@
+<ng-template #userTpl let-list let-type="type" let-title="title">
+  <nz-card [nzTitle]="title" [nzExtra]="userExtra" class="ant-card__body-nopadding">
+    <ng-template #userExtra>
+      <button (click)="msg.success('New ' + type)" nz-button nzSize="small" nzType="dashed">
+        <i nz-icon nzType="plus"></i>
+        Add
+      </button>
+    </ng-template>
+    <ul class="list-unstyled mb0">
+      <li
+        *ngFor="let i of list; let last = last"
+        class="d-flex align-items-center px-md py-sm"
+        [ngClass]="{ 'border-bottom-1': !last }"
+      >
+        <nz-avatar [nzSrc]="i.mp"></nz-avatar>
+        <a class="px-sm flex-1">{{ i.name }}</a>
+        <i
+          nz-popconfirm
+          nzPopconfirmTitle="确定吗？"
+          (nzOnConfirm)="msg.success('Remove ' + type)"
+          class="text-hover point text-xs"
+          nz-icon
+          nzType="close"
+        ></i>
+      </li>
+    </ul>
+  </nz-card>
+</ng-template>
+<page-header-wrapper [loading]="!i" [title]="i ? i.title : 'loading'">
+  <ng-container *ngIf="i">
+    <div nz-row nzGutter="0">
+      <div nz-col nzMd="18">
+        <div class="p-lg">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong class="pr-sm text-lg text-error">{{ i.task.process }}%</strong>completed
+            </div>
+            <div class="text-grey text-xs">
+              {{ i.task.opened }} opened tasks, {{ i.task.completed }} tasks completed
+            </div>
+          </div>
+          <nz-progress
+            [nzPercent]="i.task.process"
+            [nzStatus]="i.status"
+            [nzShowInfo]="false"
+            nzStrokeWidth="3"
+            nzSize="small"
+          ></nz-progress>
+        </div>
+      </div>
+      <div nz-col nzMd="6">
+        <div class="p-md">
+          <div class="text-grey text-xs mb-sm">Status</div>
+          <div
+            class="text-lg"
+            [ngClass]="{
+              'text-success-dark': i.status === 'active',
+              'text-warning-dark': i.status === 'pending',
+              'text-primary-dark': i.status === 'complete'
+            }"
+          >
+            {{ i.status }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div nz-row nzGutter="24">
+      <div nz-col nzMd="18">
+        <nz-card nzTitle="Description">
+          <div [innerHTML]="i.desc | html"></div>
+        </nz-card>
+        <nz-card nzTitle="Attached files">
+          <div nz-row nzGutter="24">
+            <div *ngFor="let f of i.attachements" nz-col nzLg="12" nzXl="8">
+              <div class="attachment">
+                <div
+                  *ngIf="f.type === 'jpg'"
+                  class="attachment-img"
+                  [ngStyle]="{ 'background-image': 'url(' + f.url + ')' }"
+                ></div>
+                <div *ngIf="f.type !== 'jpg'" class="attachment-icon">
+                  <i nz-icon nzType="file-{{ f.type }}"></i>
+                </div>
+                <div class="ml-sm">
+                  <div class="font-weight-bold text-truncate">{{ f.filename }}</div>
+                  <div class="text-xs text-grey">{{ f.size }}</div>
+                  <div>
+                    <a (click)="msg.success('view')" *ngIf="f.type === 'jpg'" class="pr-sm">View</a>
+                    <a [href]="f.url | url" target="_blank">Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nz-card>
+        <nz-card>
+          <nz-card-tab>
+            <nz-tabset nzSize="large" [(nzSelectedIndex)]="idx">
+              <nz-tab nzTitle="Tasks"></nz-tab>
+              <nz-tab nzTitle="Discussion"></nz-tab>
+              <nz-tab nzTitle="Activity"></nz-tab>
+            </nz-tabset>
+          </nz-card-tab>
+          <ng-container [ngSwitch]="idx">
+            <div *ngSwitchCase="0" cdkDropListGroup>
+              <div
+                *ngFor="let item of i.tasks"
+                cdkDropList
+                [cdkDropListData]="item.list"
+                (cdkDropListDropped)="drop($event)"
+                class="task__container p-lg"
+              >
+                <h3 class="task__title">{{ item.title }}</h3>
+                <div class="task__list" [attr.data-id]="item.id">
+                  <div *ngFor="let i of item.list; let idx = index" cdkDrag class="task__item">
+                    <label nz-checkbox [(ngModel)]="i.done" name="i.done">
+                      <span [ngClass]="{ 'task__item-done': i.done }" class="mr-sm">{{ i.title }}</span>
+                      <nz-tag *ngIf="i.label" [nzColor]="i.label.color">{{ i.label.text }}</nz-tag>
+                      <nz-tag *ngIf="!i.done && i.due">{{ i.due }}</nz-tag>
+                    </label>
+                    <div class="d-flex align-items-center">
+                      <i nz-icon nzType="fullscreen" class="task__item-handle" cdkDragHandle></i>
+                      <span nz-dropdown [nzDropdownMenu]="taskMenu" nzPlacement="bottomRight" class="dd-btn">
+                        <i nz-icon nzType="ellipsis"></i>
+                      </span>
+                      <nz-dropdown-menu #taskMenu="nzDropdownMenu">
+                        <ul nz-menu>
+                          <li nz-menu-item (click)="msg.success('edit')">Edit</li>
+                          <li nz-menu-item nz-popconfirm nzPopconfirmTitle="确定吗？" (nzOnConfirm)="del(item, i, idx)">
+                            Remove
+                          </li>
+                        </ul>
+                      </nz-dropdown-menu>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ng-container *ngSwitchCase="1">
+              <div *ngFor="let d of i.discussions" class="d-flex mb-md">
+                <div class="text-center">
+                  <nz-avatar [nzSrc]="d.user_avatar"></nz-avatar>
+                  <div class="text-xs text-grey text-nowrap pt-xs">{{ d.time | _date: 'hh:mm a' }}</div>
+                </div>
+                <div class="flex-1 bg-grey-lighter rounded-sm ml-md p-md">
+                  <strong class="d-block mb-sm">{{ d.user_name }}</strong>
+                  {{ d.content }}
+                </div>
+              </div>
+              <div class="border-top-1 pt-md">
+                <nz-input-group nzSearch nzSize="large" [nzSuffix]="suffixButton">
+                  <input type="text" nz-input placeholder="Type your message" />
+                </nz-input-group>
+                <ng-template #suffixButton>
+                  <button nz-button nzType="primary" nzSize="large" nzSearch>Send</button>
+                </ng-template>
+              </div>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <div *ngFor="let d of i.activities" class="d-flex align-items-center mb-sm pb-xs">
+                <div class="feed__icon">
+                  <nz-avatar [nzSrc]="d.user_avatar"></nz-avatar>
+                  <div class="feed__icon-tag" [ngSwitch]="d.type">
+                    <i
+                      *ngSwitchCase="'add'"
+                      nz-icon
+                      nzType="plus-circle"
+                      nzTheme="twotone"
+                      nzTwotoneColor="#e84c64"
+                    ></i>
+                    <i
+                      *ngSwitchCase="'completed'"
+                      nz-icon
+                      nzType="check-circle"
+                      nzTheme="twotone"
+                      nzTwotoneColor="#87d068"
+                    ></i>
+                    <i *ngSwitchCase="'assigned'" nz-icon nzType="heart" nzTheme="twotone" nzTwotoneColor="#28c3d7"></i>
+                    <i *ngSwitchDefault nz-icon nzType="code" nzTheme="twotone" nzTwotoneColor="#ffd950"></i>
+                  </div>
+                </div>
+                <div class="flex-1 ml-md">
+                  <a>{{ d.user_name }}</a>
+                  <ng-container [ngSwitch]="d.type">
+                    <span *ngSwitchCase="'add'">
+                      added new task <strong>{{ d.message }}</strong></span
+                    >
+                    <span *ngSwitchCase="'completed'">
+                      completed task <strong>{{ d.message }}</strong></span
+                    >
+                    <span *ngSwitchCase="'assigned'">
+                      assigned new participant <a>{{ d.assigne_name }}</a></span
+                    >
+                    <span *ngSwitchDefault>
+                      pushed commit <strong>#{{ d.commit }}</strong></span
+                    >
+                  </ng-container>
+                  <div class="text-grey text-xs">2 hours ago</div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </nz-card>
+      </div>
+      <div nz-col nzMd="6">
+        <nz-card nzTitle="Project details" class="ant-card__body-nopadding">
+          <ul class="list-unstyled">
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Client</span>
+              <a>Company Ltd.</a>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Created by</span>
+              <a>{{ i.user_name }}</a>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Created at</span>
+              <span>{{ i.created | _date: 'MM/DD/YYYY' }}</span>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <strong class="text-grey">Deadline</strong>
+              <span>{{ i.deadline | _date: 'MM/DD/YYYY' }}</span>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Priority</span>
+              <button nz-dropdown [nzDropdownMenu]="sizeMenu" nz-button nzSize="small" nzType="danger">
+                <span>Hight</span><i nz-icon nzType="down"></i>
+              </button>
+              <nz-dropdown-menu #sizeMenu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item>Hight</li>
+                  <li nz-menu-item>Medium</li>
+                  <li nz-menu-item>Low</li>
+                </ul>
+              </nz-dropdown-menu>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Hour rate</span>
+              <span>RMB800/h</span>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Total hours</span>
+              <span>100</span>
+            </li>
+            <li class="d-flex justify-content-between align-items-center px-md py-sm border-bottom-1">
+              <span class="text-grey">Total cost</span>
+              <span>8000</span>
+            </li>
+            <li class="px-md pt-sm">
+              <span class="text-grey">Tags</span>
+              <div class="mt-xs">
+                <nz-tag>ng-alain</nz-tag>
+                <nz-tag>seo</nz-tag>
+                <nz-tag>design</nz-tag>
+              </div>
+            </li>
+          </ul>
+        </nz-card>
+        <ng-template
+          [ngTemplateOutlet]="userTpl"
+          [ngTemplateOutletContext]="{ $implicit: i.leaders, type: 'leaders', title: 'Leaders' }"
+        ></ng-template>
+        <ng-template
+          [ngTemplateOutlet]="userTpl"
+          [ngTemplateOutletContext]="{ $implicit: i.participants, type: 'participant', title: 'Participants' }"
+        ></ng-template>
+      </div>
+    </div>
+  </ng-container>
+</page-header-wrapper>

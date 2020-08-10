@@ -1,0 +1,34 @@
+<page-header-wrapper [content]="phContent">
+  <ng-template #phContent> </ng-template>
+  <nz-card [nzTitle]="docxtemplaterTpl">
+    <ng-template #docxtemplaterTpl>
+      <a href="https://github.com/open-xml-templating/docxtemplater" target="_blank">docxtemplater</a>
+    </ng-template>
+    <div nz-row nzGutter="32">
+      <div nz-col nzMd="24" nzLg="8">
+        <nz-radio-group [(ngModel)]="type">
+          <label nz-radio [nzValue]="1">默认模板 <a href="{{ url }}" download>docx.docx</a></label>
+          <label nz-radio [nzValue]="2">自定义</label>
+        </nz-radio-group>
+        <div *ngIf="type === 2" class="mt-md">
+          <input type="file" accept=".docx" (change)="onChange($event)" />
+        </div>
+      </div>
+      <div nz-col nzMd="24" nzLg="8">
+        <textarea nz-input [(ngModel)]="data" style="height: 150px"></textarea>
+      </div>
+      <div nz-col nzMd="24" nzLg="8">
+        <button nz-button nzType="primary" (click)="output()">输出</button>
+      </div>
+    </div>
+  </nz-card>
+  <nz-card [nzTitle]="htmlDocxTpl">
+    <ng-template #htmlDocxTpl>
+      <a href="https://github.com/evidenceprime/html-docx-js" target="_blank">html-docx-js</a>
+    </ng-template>
+    <editor [(ngModel)]="html"></editor>
+    <div class="mt-md">
+      <button nz-button nzType="primary" (click)="htmlToDocx()">Save</button>
+    </div>
+  </nz-card>
+</page-header-wrapper>

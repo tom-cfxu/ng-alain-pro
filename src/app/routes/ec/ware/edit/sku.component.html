@@ -1,0 +1,57 @@
+<nz-card nzTitle="Skus">
+  <div se-container="1" *ngIf="cog.list.length > 0" class="mb-md bg-green-1">
+    <se *ngFor="let p of cog.list" [label]="p.name">
+      <span class="mr-md" *ngFor="let x of p.arr; let idx = index">
+        <label nz-checkbox [(ngModel)]="x.sel" (ngModelChange)="cho()" name="x.sel.{{ idx }}">
+          <i *ngIf="p.type === 'color'" class="ware__color" [ngStyle]="{ background: x.color }"></i>
+          <span *ngIf="!x.sel" [ngClass]="{ 'pl-sm': p.type === 'color' }">{{ x.value_org }}</span>
+        </label>
+        <input
+          *ngIf="x.sel"
+          nz-input
+          [(ngModel)]="x.value"
+          name="x.value.{{ idx }}"
+          (blur)="cho()"
+          nzSize="small"
+          style="width: 80px"
+          [ngClass]="{ 'ml-sm': p.type !== 'color' }"
+        />
+      </span>
+      <button (click)="addArr(p.type)" nz-button type="button" nzSize="small" nzType="dashed">
+        <i nz-icon nzType="plus"></i>添加
+      </button>
+    </se>
+  </div>
+  <nz-table *ngIf="cog.count > 0" [nzData]="i.skus" [nzShowPagination]="false" nzSize="small">
+    <thead>
+      <tr>
+        <th *ngFor="let p of properties">{{ p.name }}</th>
+        <th>销售价</th>
+        <th>库存</th>
+        <th>商家SKU(可不填)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of i.skus; let idx = index">
+        <td *ngFor="let n of getValidName(i.names)">{{ n }}</td>
+        <td>
+          <nz-input-number [(ngModel)]="i.price" name="i.price.{{ idx }}" nzMin="0.1" required></nz-input-number>
+        </td>
+        <td>
+          <nz-input-number [(ngModel)]="i.stock" name="i.stock.{{ idx }}" nzMin="0" required></nz-input-number>
+        </td>
+        <td>
+          <input nz-input [(ngModel)]="i.outer_id" name="i.outer_id.{{ idx }}" maxlength="50" />
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <div se-container *ngIf="cog.count === 0">
+    <se label="库存" required error="必填项">
+      <nz-input-number [(ngModel)]="i.skus[0].num" name="skus[0].num" required></nz-input-number>
+    </se>
+    <se label="商家SKU">
+      <input nz-input [(ngModel)]="i.skus[0].outer_id" name="skus[0].outer_id" maxlength="50" />
+    </se>
+  </div>
+</nz-card>
